@@ -8,6 +8,8 @@ cols = ['month_date_yyyymm', 'postal_code', 'zip_name','median_listing_price',  
 #data_dic = {'month_date_yyyymm':'string', 'postal_code':'string', 'zip_name':'string','median_listing_price':'int64',  'active_listing_count':'int32','median_days_on_market':'int32'}
 df = pd.read_csv(url, low_memory=False, usecols=cols)
 df.drop(df.tail(1).index,inplace=True) # drop last row that has data RDC contact info
+tgt_zips = ['74728', '94123', '11211', '11249", '30560', '39110', '95670']
+df = df[df.postal_code.isin(tgt_zips)]
 for col in list(df.select_dtypes(['object']).columns):
   df[col] = df[col].astype('string')
   
