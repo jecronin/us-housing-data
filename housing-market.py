@@ -4,7 +4,7 @@ import plotly.express as px
 st.set_page_config(layout="wide")
 # -- Read in the data
 url = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Core/RDC_Inventory_Core_Metrics_Zip_History.csv"
-df= pd.read_csv(url)
+df= pd.read_csv(url, low_memory=False)
 for col in list(df.select_dtypes(['object']).columns) :
   df[col] = df[col].astype('string')
 
