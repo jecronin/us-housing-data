@@ -4,10 +4,13 @@ import plotly.express as px
 st.set_page_config(layout="wide")
 # -- Read in the data
 url = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Core/RDC_Inventory_Core_Metrics_Zip_History.csv"
-df= pd.read_csv(url, low_memory=False)
-for col in list(df.select_dtypes(['object']).columns) :
+cols = ['month_date_yyyymm', 'postal_code', 'zip_name','median_listing_price',  'active_listing_count','median_days_on_market']
+#data_dic = {'month_date_yyyymm':'string', 'postal_code':'string', 'zip_name':'string','median_listing_price':'int64',  'active_listing_count':'int32','median_days_on_market':'int32'}
+df = pd.read_csv(url, usecols=cols)
+df.drop(df.tail(1).index,inplace=True) # drop last row that has data RDC contact info
+for col in list(df.select_dtypes(['object']).columns):
   df[col] = df[col].astype('string')
-
+  
 zip_list = ("74728", "94123", "11211", "11249", "30560", "39110", "95670")
 #Create 3 columns
 col1, col2, col3 = st.columns([5, 5, 20])
