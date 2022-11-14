@@ -8,7 +8,7 @@ df= pd.read_csv(url, low_memory=False)
 for col in list(df.select_dtypes(['object']).columns) :
   df[col] = df[col].astype('string')
 
-zip_list = ("74728", "94123", "11211", "11249", "30560", "39110")
+zip_list = ("74728", "94123", "11211", "11249", "30560", "39110", "95670")
 # -- Create three columns
 col1, col2, col3 = st.columns([5, 5, 20])
 # -- Put the image in the middle column
