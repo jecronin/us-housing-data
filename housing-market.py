@@ -6,13 +6,43 @@ st.set_page_config(layout="wide")
 url = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Core/RDC_Inventory_Core_Metrics_Zip_History.csv"
 cols = ['month_date_yyyymm', 'postal_code', 'zip_name','median_listing_price',  'active_listing_count','median_days_on_market']
 #data_dic = {'month_date_yyyymm':'string', 'postal_code':'string', 'zip_name':'string','median_listing_price':'int64',  'active_listing_count':'int32','median_days_on_market':'int32'}
-df = pd.read_csv(url, low_memory=False, usecols=cols)
-df.drop(df.tail(1).index,inplace=True) # drop last row that has data RDC contact info
-tgt_zips = ['74728', '94123', '11211', '11249', '30560', '39110', '95670']
+data = pd.read_csv(url, low_memory=False, usecols=cols, chunksize=1000)
+df = pd.concat(data)
+df.drop(df.tail(1).index,inplace=True) # drop last row that has data RDC contact info                                 
+tgt_zips = ['74728', '94123', '11211', '11249', '30560', '39110', '95670'] 
 df = df[df.postal_code.isin(tgt_zips)]
-for col in list(df.select_dtypes(['object']).columns):
-  df[col] = df[col].astype('string')
-  
+def reduce_mem_usage(df):
+    for col in df.columns:
+        col_type = df[col].dtype
+    if col_type != object:
+            c_min = df[col].min()
+            c_max = df[col].max()
+            if str(col_type)[:3] == 'int':
+                if c_min > np.iinfo(np.int8).min and c_max < np.iinfo(np.int8).max:
+                    df[col] = df[col].astype(np.int8)
+                elif c_min > np.iinfo(np.uint8).min and c_max < np.iinfo(np.uint8).max:
+                    df[col] = df[col].astype(np.uint8)
+                elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
+                    df[col] = df[col].astype(np.int16)
+                elif c_min > np.iinfo(np.uint16).min and c_max < np.iinfo(np.uint16).max:
+                    df[col] = df[col].astype(np.uint16)
+                elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
+                    df[col] = df[col].astype(np.int32)
+                elif c_min > np.iinfo(np.uint32).min and c_max < np.iinfo(np.uint32).max:
+                    df[col] = df[col].astype(np.uint32)                    
+                elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
+                    df[col] = df[col].astype(np.int64)
+                elif c_min > np.iinfo(np.uint64).min and c_max < np.iinfo(np.uint64).max:
+                    df[col] = df[col].astype(np.uint64)
+            elif str(col_type)[:5] == 'float':
+                if c_min > np.finfo(np.float16).min and c_max < np.finfo(np.float16).max:
+                    df[col] = df[col].astype(np.float16)
+                elif c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
+                    df[col] = df[col].astype(np.float32)
+                else:
+                    df[col] = df[col].astype(np.float64)
+reduce_mem_usage(df)
+
 zip_list = ("74728", "94123", "11211", "11249", "30560", "39110", "95670")
 #Create 3 columns
 col1, col2, col3 = st.columns([5, 5, 20])
