@@ -5,7 +5,7 @@ import numpy as np
 st.set_page_config(layout="wide")
 # -- Read in the data
 url = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Core/RDC_Inventory_Core_Metrics_Zip_History.csv"
-cols = ['month_date_yyyymm', 'postal_code','median_listing_price',  'active_listing_count','median_days_on_market'] #add back zip name when want to use
+cols = ['month_date_yyyymm', 'postal_code','median_listing_price',  'active_listing_count','median_days_on_market', 'new_listing_count', 'price_increased_count', 'price_reduced_count'] #add back zip name when want to use
 #data_dic = {'month_date_yyyymm':'string', 'postal_code':'string', 'zip_name':'string','median_listing_price':'int64',  'active_listing_count':'int32','median_days_on_market':'int32'}
 df = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')
 df.drop(df.tail(1).index,inplace=True) # drop last row that has data RDC contact info                                 
@@ -85,3 +85,30 @@ fig3 = px.line(df_tgt,
 )
 # -- Input the Plotly chart to the Streamlit interface
 st.plotly_chart(fig3, use_container_width=True)
+
+fig4 = px.line(df_tgt,
+                x='month_date_yyyymm',
+                y='new_listing_count',
+                title = 'new_listing_count' + " in " + zip_input,
+                markers=True
+)
+# -- Input the Plotly chart to the Streamlit interface
+st.plotly_chart(fig4, use_container_width=True)
+
+fig5 = px.line(df_tgt,
+                x='month_date_yyyymm',
+                y='price_increased_count',
+                title = 'price_increased_count' + " in " + zip_input,
+                markers=True
+)
+# -- Input the Plotly chart to the Streamlit interface
+st.plotly_chart(fig5, use_container_width=True)
+
+fig6 = px.line(df_tgt,
+                x='month_date_yyyymm',
+                y='price_reduced_count',
+                title = 'price_reduced_count' + " in " + zip_input,
+                markers=True
+)
+# -- Input the Plotly chart to the Streamlit interface
+st.plotly_chart(fig6, use_container_width=True)
