@@ -7,10 +7,12 @@ st.set_page_config(layout="wide")
 url = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Core/RDC_Inventory_Core_Metrics_Zip_History.csv"
 cols = ['month_date_yyyymm', 'postal_code','median_listing_price',  'active_listing_count','median_days_on_market', 'new_listing_count', 'price_increased_count', 'price_reduced_count'] #add back zip name when want to use
 #data_dic = {'month_date_yyyymm':'string', 'postal_code':'string', 'zip_name':'string','median_listing_price':'int64',  'active_listing_count':'int32','median_days_on_market':'int32'}
-df = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')
+df = pd.read_csv(url, low_memory=False, usecols=cols, sep=',') #read in csv
 df.drop(df.tail(1).index,inplace=True) # drop last row that has data RDC contact info                                 
-tgt_zips = sorted(['74728', '94123', '11211', '11249', '30560', '39110', '95670', '35004', '35007', '35094'])
-df = df[df.postal_code.isin(tgt_zips)]
+tgt_zips = sorted(['74728', '94123', '11211', '11249', '30560', '39110', '95670', '35004', '35007', '35094'])#set target list of zips
+df = df[df.postal_code.isin(tgt_zips)] #filter df
+df['month_date_yyyymm'] = pd.to_datetime(df['month_date_yyyymm'], format='%Y%m') #convert date to datetime
+#reduce memory of dataframe
 def reduce_mem_usage(df):
     for col in df.columns:
         col_type = df[col].dtype
