@@ -49,7 +49,7 @@ col1, col2, col3 = st.columns([5, 5, 20])
 # -- Put the image in the middle column
 # - Commented out here so that the file will run without having the image downloaded
 with col1:
-    st.text('Source: Realtor.com Research Data')
+    st.markdown('Source: Realtor.com Research Data')
 with col2:
   zip_input = st.selectbox("What zip code?", zip_list)
 # -- Put the title in the last column
