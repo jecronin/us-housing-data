@@ -9,7 +9,7 @@ cols = ['month_date_yyyymm', 'postal_code','median_listing_price',  'active_list
 #data_dic = {'month_date_yyyymm':'string', 'postal_code':'string', 'zip_name':'string','median_listing_price':'int64',  'active_listing_count':'int32','median_days_on_market':'int32'}
 df = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')
 df.drop(df.tail(1).index,inplace=True) # drop last row that has data RDC contact info                                 
-tgt_zips = ['74728', '94123', '11211', '11249', '30560', '39110', '95670', '35004', '35007', '35094'] 
+tgt_zips = sorted(['74728', '94123', '11211', '11249', '30560', '39110', '95670', '35004', '35007', '35094'])
 df = df[df.postal_code.isin(tgt_zips)]
 def reduce_mem_usage(df):
     for col in df.columns:
@@ -43,7 +43,6 @@ def reduce_mem_usage(df):
                     df[col] = df[col].astype(np.float64)
 reduce_mem_usage(df)
 
-zip_list = sorted(("74728", "94123", "11211", "11249", "30560", "39110", "95670", "35004", "35007", "35094"))
 #Create 3 columns
 col1, col2, col3 = st.columns([5, 5, 20])
 # -- Put the image in the middle column
@@ -51,7 +50,7 @@ col1, col2, col3 = st.columns([5, 5, 20])
 with col1:
     st.markdown('Source: Realtor.com Research Data')
 with col2:
-  zip_input = st.selectbox("What zip code?", zip_list)
+  zip_input = st.selectbox("What zip code?", tgt_zips)
 # -- Put the title in the last column
 with col3:
     st.title("Housing Market Trends by Zip Code")
