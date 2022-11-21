@@ -43,7 +43,7 @@ def reduce_mem_usage(df):
                     df[col] = df[col].astype(np.float64)
 reduce_mem_usage(df)
 
-zip_list = ("74728", "94123", "11211", "11249", "30560", "39110", "95670", "35004", "35007", "35094")
+zip_list = sorted(("74728", "94123", "11211", "11249", "30560", "39110", "95670", "35004", "35007", "35094"))
 #Create 3 columns
 col1, col2, col3 = st.columns([5, 5, 20])
 # -- Put the image in the middle column
