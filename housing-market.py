@@ -58,6 +58,9 @@ with col3:
     st.title("Housing Market Trends by Zip Code")
 # -- We use the first column here as a dummy to add a space to the left
 
+with tab1:
+    st.radio('Select one:', [1, 2])
+
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', ascending=True)
 fig = px.line(df_tgt,
                 x='month_date_yyyymm',
