@@ -58,7 +58,7 @@ with col3:
     st.title("Housing Market Trends by Zip Code")
 # -- We use the first column here as a dummy to add a space to the left
 
-tab 1  = st.tabs(["Tab 1", "Tab2"])
+tab1  = st.tabs(["Tab 1", "Tab2"])
 with tab1:
     st.radio('Select one:', [1, 2])
 
