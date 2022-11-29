@@ -51,6 +51,7 @@ col1, col2, col3 = st.columns([5, 5, 20])
 # - Commented out here so that the file will run without having the image downloaded
 with col1:
     st.markdown('Source: Realtor.com Research Data')
+    st.markdown('test test')
 with col2:
   zip_input = st.selectbox("What zip code?", tgt_zips)
 # -- Put the title in the last column
