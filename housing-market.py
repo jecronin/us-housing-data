@@ -51,7 +51,7 @@ col1, col2, col3 = st.columns([5, 5, 20])
 # - Commented out here so that the file will run without having the image downloaded
 with col1:
     st.markdown('Source: Realtor.com Research Data')
-    st.write("Learn more"](https://www.realtor.com/research/data/)")
+    st.write("[Learn more](https://www.realtor.com/research/data/)")
 
 with col2:
   zip_input = st.selectbox("What zip code?", tgt_zips)
