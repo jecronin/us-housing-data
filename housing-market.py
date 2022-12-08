@@ -10,11 +10,11 @@ cols = ['month_date_yyyymm', 'postal_code','median_listing_price',  'active_list
 @st.cache
 def load_data():
     return pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] #read in csv
-data = load_data()
+df = load_data()
 #data.drop(data.tail(1).index,inplace=True) # drop last row that has data RDC contact info                                 
-tgt_zips = sorted(['74728', '94123', '11211', '11249', '30560', '39110', '95670', '35004', '35007', '35094', '12758', '37738', '37862', '12440'])#set target list of zips
-df = data[data.postal_code.isin(tgt_zips)] #filter df
-del data #delete large dataframe to save memory
+#tgt_zips = sorted(['74728', '94123', '11211', '11249', '30560', '39110', '95670', '35004', '35007', '35094', '12758', '37738', '37862', '12440'])#set target list of zips
+#df = data[data.postal_code.isin(tgt_zips)] #filter df
+#del data #delete large dataframe to save memory
 df['month_date_yyyymm'] = pd.to_datetime(df['month_date_yyyymm'], format='%Y%m') #convert date to datetime
 #reduce memory of dataframe
 def reduce_mem_usage(df):
