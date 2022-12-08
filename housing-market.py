@@ -119,5 +119,3 @@ fig6 = px.line(df_tgt,
 )
 # -- Input the Plotly chart to the Streamlit interface
 st.plotly_chart(fig6, use_container_width=True)
-
-st.dataframe(df)
