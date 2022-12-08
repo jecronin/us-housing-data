@@ -45,6 +45,11 @@ def load_data():
     reduce_mem_usage(d)
     return d
 df = load_data()
+@st.cache
+def load_zips():
+    return df[['postal_code','zip_name']]
+zip_df = load_zips()
+st.dataframe(zip_df)
 #data.drop(data.tail(1).index,inplace=True) # drop last row that has data RDC contact info                                 
 #tgt_zips = sorted(['74728', '94123', '11211', '11249', '30560', '39110', '95670', '35004', '35007', '35094', '12758', '37738', '37862', '12440'])#set target list of zips
 #df = data[data.postal_code.isin(tgt_zips)] #filter df
