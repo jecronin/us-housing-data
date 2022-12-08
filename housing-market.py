@@ -9,46 +9,45 @@ cols = ['month_date_yyyymm', 'postal_code','median_listing_price',  'active_list
 #data_dic = {'month_date_yyyymm':'string', 'postal_code':'string', 'zip_name':'string','median_listing_price':'int64',  'active_listing_count':'int32','median_days_on_market':'int32'}
 @st.cache
 def load_data():
-    return pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] #read in csv
+    df = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] #read in csv
+    df['month_date_yyyymm'] = pd.to_datetime(df['month_date_yyyymm'], format='%Y%m') #convert date to datetime
+    #reduce memory of dataframe
+    def reduce_mem_usage(df):
+        for col in df.columns:
+            col_type = df[col].dtype
+        if col_type != object:
+                c_min = df[col].min()
+                c_max = df[col].max()
+                if str(col_type)[:3] == 'int':
+                    if c_min > np.iinfo(np.int8).min and c_max < np.iinfo(np.int8).max:
+                        df[col] = df[col].astype(np.int8)
+                    elif c_min > np.iinfo(np.uint8).min and c_max < np.iinfo(np.uint8).max:
+                        df[col] = df[col].astype(np.uint8)
+                    elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
+                        df[col] = df[col].astype(np.int16)
+                    elif c_min > np.iinfo(np.uint16).min and c_max < np.iinfo(np.uint16).max:
+                        df[col] = df[col].astype(np.uint16)
+                    elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
+                        df[col] = df[col].astype(np.int32)
+                    elif c_min > np.iinfo(np.uint32).min and c_max < np.iinfo(np.uint32).max:
+                        df[col] = df[col].astype(np.uint32)                    
+                    elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
+                        df[col] = df[col].astype(np.int64)
+                    elif c_min > np.iinfo(np.uint64).min and c_max < np.iinfo(np.uint64).max:
+                        df[col] = df[col].astype(np.uint64)
+                elif str(col_type)[:5] == 'float':
+                    if c_min > np.finfo(np.float16).min and c_max < np.finfo(np.float16).max:
+                        df[col] = df[col].astype(np.float16)
+                    elif c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
+                        df[col] = df[col].astype(np.float32)
+                    else:
+                        df[col] = df[col].astype(np.float64)
+    reduce_mem_usage(df)
+    return 
 data = load_data()
 #data.drop(data.tail(1).index,inplace=True) # drop last row that has data RDC contact info                                 
 tgt_zips = sorted(['74728', '94123', '11211', '11249', '30560', '39110', '95670', '35004', '35007', '35094', '12758', '37738', '37862'])#set target list of zips
 df = data[data.postal_code.isin(tgt_zips)] #filter df
-del data #delete large dataframe to save memory
-df['month_date_yyyymm'] = pd.to_datetime(df['month_date_yyyymm'], format='%Y%m') #convert date to datetime
-#reduce memory of dataframe
-def reduce_mem_usage(df):
-    for col in df.columns:
-        col_type = df[col].dtype
-    if col_type != object:
-            c_min = df[col].min()
-            c_max = df[col].max()
-            if str(col_type)[:3] == 'int':
-                if c_min > np.iinfo(np.int8).min and c_max < np.iinfo(np.int8).max:
-                    df[col] = df[col].astype(np.int8)
-                elif c_min > np.iinfo(np.uint8).min and c_max < np.iinfo(np.uint8).max:
-                    df[col] = df[col].astype(np.uint8)
-                elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
-                    df[col] = df[col].astype(np.int16)
-                elif c_min > np.iinfo(np.uint16).min and c_max < np.iinfo(np.uint16).max:
-                    df[col] = df[col].astype(np.uint16)
-                elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
-                    df[col] = df[col].astype(np.int32)
-                elif c_min > np.iinfo(np.uint32).min and c_max < np.iinfo(np.uint32).max:
-                    df[col] = df[col].astype(np.uint32)                    
-                elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
-                    df[col] = df[col].astype(np.int64)
-                elif c_min > np.iinfo(np.uint64).min and c_max < np.iinfo(np.uint64).max:
-                    df[col] = df[col].astype(np.uint64)
-            elif str(col_type)[:5] == 'float':
-                if c_min > np.finfo(np.float16).min and c_max < np.finfo(np.float16).max:
-                    df[col] = df[col].astype(np.float16)
-                elif c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
-                    df[col] = df[col].astype(np.float32)
-                else:
-                    df[col] = df[col].astype(np.float64)
-reduce_mem_usage(df)
-
 #Create 3 columns
 col1, col2, col3 = st.columns([5, 5, 20])
 # -- Put the image in the middle column
