@@ -57,7 +57,7 @@ with col1:
     st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/data/)")
 
 with col2:
-  zip_input = st.selectbox("What zip code?", tgt_zips)
+  zip_input = st.selectbox("What zip code?", sorted(list(df.postal_code.unique())))
 # -- Put the title in the last column
 with col3:
     st.title("Housing Market Trends by Zip Code")
