@@ -9,7 +9,7 @@ cols = ['month_date_yyyymm', 'postal_code', 'zip_name', 'median_listing_price', 
 #data_dic = {'month_date_yyyymm':'string', 'postal_code':'string', 'zip_name':'string','median_listing_price':'int64',  'active_listing_count':'int32','median_days_on_market':'int32'}
 @st.cache
 def load_data():
-    d = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] #read in csv
+    d = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] #read in csv and drop the last row of contact information
     d['month_date_yyyymm'] = pd.to_datetime(d['month_date_yyyymm'], format='%Y%m') #convert date to datetime
     #reduce memory of dataframe
     def reduce_mem_usage(d):
@@ -45,11 +45,11 @@ def load_data():
     reduce_mem_usage(d)
     return d
 df = load_data()
-@st.cache
+'''@st.cache
 def load_zips():
     return df[['postal_code','zip_name']]
 zip_df = load_zips()
-st.dataframe(zip_df)
+st.dataframe(zip_df)'''
 #data.drop(data.tail(1).index,inplace=True) # drop last row that has data RDC contact info                                 
 #tgt_zips = sorted(['74728', '94123', '11211', '11249', '30560', '39110', '95670', '35004', '35007', '35094', '12758', '37738', '37862', '12440'])#set target list of zips
 #df = data[data.postal_code.isin(tgt_zips)] #filter df
