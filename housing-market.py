@@ -18,7 +18,7 @@ df = load_data()
 #df = data[data.postal_code.isin(tgt_zips)] #filter df
 #del data #delete large dataframe to save memory
 
-#reduce memory of dataframe
+'''#reduce memory of dataframe
 def reduce_mem_usage(df):
     for col in df.columns:
         col_type = df[col].dtype
@@ -49,7 +49,7 @@ def reduce_mem_usage(df):
                     df[col] = df[col].astype(np.float32)
                 else:
                     df[col] = df[col].astype(np.float64)
-reduce_mem_usage(df)
+reduce_mem_usage(df)'''
 
 #Create 3 columns
 col1, col2, col3 = st.columns([5, 5, 20])
