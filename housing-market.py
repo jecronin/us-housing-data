@@ -49,7 +49,6 @@ df = load_data()
 #tgt_zips = sorted(['74728', '94123', '11211', '11249', '30560', '39110', '95670', '35004', '35007', '35094', '12758', '37738', '37862', '12440'])#set target list of zips
 #df = data[data.postal_code.isin(tgt_zips)] #filter df
 #del data #delete large dataframe to save memory
-
 #Create 3 columns
 col1, col2, col3 = st.columns([5, 5, 20])
 # -- Put the image in the middle column
@@ -63,6 +62,7 @@ with col2:
 with col3:
     st.title("Housing Market Trends by Zip Code")
 # -- We use the first column here as a dummy to add a space to the left
+st.markdown("This dashboard pulls in summary market metrics for all zip codes in the US and shows their trends over time. Use it to track median prices, price changes,  new listings and active inventory in your zip code of interest.")
 
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', ascending=True)
 fig = px.line(df_tgt,
