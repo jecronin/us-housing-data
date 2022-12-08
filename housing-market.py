@@ -73,7 +73,7 @@ df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', asc
 fig = px.line(df_tgt,
                 x='month_date_yyyymm',
                 y='median_listing_price',
-                title = 'Median Listing Price' + " in " + zip_input,
+                title = 'Median Listing Price' + " in " + zip_input + df_tgt['zip_name'].iloc[0],
                 markers=True
 )
 
