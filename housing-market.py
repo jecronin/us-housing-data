@@ -5,7 +5,7 @@ import numpy as np
 st.set_page_config(layout="wide")
 # -- Read in the data
 url = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Core/RDC_Inventory_Core_Metrics_Zip_History.csv"
-cols = ['month_date_yyyymm', 'postal_code', 'zip_name', 'median_listing_price',  'active_listing_count','median_days_on_market', 'new_listing_count', 'price_increased_count', 'price_reduced_count'] #add back zip name when want to use
+cols = ['month_date_yyyymm', 'postal_code', 'median_listing_price',  'active_listing_count','median_days_on_market', 'new_listing_count', 'price_increased_count', 'price_reduced_count'] #add back zip name when want to use
 #data_dic = {'month_date_yyyymm':'string', 'postal_code':'string', 'zip_name':'string','median_listing_price':'int64',  'active_listing_count':'int32','median_days_on_market':'int32'}
 @st.cache
 def load_data():
@@ -45,11 +45,6 @@ def load_data():
     reduce_mem_usage(d)
     return d
 df = load_data()
-'''@st.cache
-def load_zips():
-    return df[['postal_code','zip_name']]
-zip_df = load_zips()
-st.dataframe(zip_df)'''
 #data.drop(data.tail(1).index,inplace=True) # drop last row that has data RDC contact info                                 
 #tgt_zips = sorted(['74728', '94123', '11211', '11249', '30560', '39110', '95670', '35004', '35007', '35094', '12758', '37738', '37862', '12440'])#set target list of zips
 #df = data[data.postal_code.isin(tgt_zips)] #filter df
@@ -73,7 +68,7 @@ df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', asc
 fig = px.line(df_tgt,
                 x='month_date_yyyymm',
                 y='median_listing_price',
-                title = 'Median Listing Price' + " in " + zip_input + str(df_tgt.zip_name.iloc[0]),
+                title = 'Median Listing Price' + " in " + zip_input,
                 markers=True
 )
 
