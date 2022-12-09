@@ -50,19 +50,17 @@ df = load_data()
 #df = data[data.postal_code.isin(tgt_zips)] #filter df
 #del data #delete large dataframe to save memory
 #Create 3 columns
-col1, col2, col3 = st.columns([5, 5, 20])
+col1, col2 = st.columns([20,5])
 # -- Put the image in the middle column
 # - Commented out here so that the file will run without having the image downloaded
 with col1:
-    st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/data/)")
-
+    st.title("Housing Market Trends by Zip Code")
+# -- Put the title in the last column
 with col2:
   zip_input = st.selectbox("What zip code?", sorted(list(df.postal_code.unique())))
-# -- Put the title in the last column
-with col3:
-    st.title("Housing Market Trends by Zip Code")
 # -- We use the first column here as a dummy to add a space to the left
 st.markdown("This dashboard pulls in summary market metrics for all zip codes in the US and shows their trends over time. Use it to track median prices, price changes,  new listings and active inventory in your zip code of interest.")
+st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/data/)")
 
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', ascending=True)
 fig = px.line(df_tgt,
