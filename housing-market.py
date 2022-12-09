@@ -12,6 +12,22 @@ def load_data():
     d = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] #read in csv and drop the last row of contact information
     d['month_date_yyyymm'] = pd.to_datetime(d['month_date_yyyymm'], format='%Y%m') #convert date to datetime
     #reduce memory of dataframe
+    coordinates_lat = []
+    coordinates_long = []
+    for i in range(0,len(d)):
+        try:
+          response = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + str(d.postal_code[i]) + '&key=AIzaSyCiXcxrZrKqIJW5Pbbn0BvDn3J26r0ysIA')
+
+          resp_json_payload = response.json()
+
+          coordinates_lat.append(resp_json_payload['results'][0]['geometry']['location']['lat'])
+
+          coordinates_long.append(resp_json_payload['results'][0]['geometry']['location']['lng'])
+
+        except:
+          0
+    d['lat'] = coordinates_lat
+    d['lng'] = coordinates_long
     def reduce_mem_usage(d):
         for col in d.columns:
             col_type = d[col].dtype
@@ -120,8 +136,4 @@ fig6 = px.line(df_tgt,
 # -- Input the Plotly chart to the Streamlit interface
 st.plotly_chart(fig6, use_container_width=True)
 
-test = pd.DataFrame(
-    np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
-    columns=['lat', 'lon'])
-
-st.map(test)
+st.map(df_tgt[df_tgt.month_date_yyyymm == max(df_tgt.month_date_yyyymm)][['lat','lng']]])
