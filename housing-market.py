@@ -119,3 +119,9 @@ fig6 = px.line(df_tgt,
 )
 # -- Input the Plotly chart to the Streamlit interface
 st.plotly_chart(fig6, use_container_width=True)
+
+test = pd.DataFrame(
+    np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
+    columns=['lat', 'lon'])
+
+st.map(test)
