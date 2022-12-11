@@ -1,7 +1,9 @@
+#import libraries
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 import numpy as np
+from geopy.geocoders import Nominatim
 st.set_page_config(layout="wide")
 # -- Read in the data
 url = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Core/RDC_Inventory_Core_Metrics_Zip_History.csv"
@@ -11,6 +13,24 @@ cols = ['month_date_yyyymm', 'postal_code', 'median_listing_price',  'active_lis
 def load_data():
     d = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] #read in csv and drop the last row of contact information
     d['month_date_yyyymm'] = pd.to_datetime(d['month_date_yyyymm'], format='%Y%m') #convert date to datetime
+    # Initialize the geolocator
+    geolocator = Nominatim(user_agent="my-application")
+
+    # Create two new columns in the dataframe to store latitude and longitude
+    d["latitude"] = None
+    dd["longitude"] = None
+
+    # Iterate through each row in the dataframe
+    for index, row in d.iterrows():
+        # Get the zip code from the row
+        zip_code = row["zip_code"]
+
+        # Use the geolocator to get the latitude and longitude for the zip code
+        location = geolocator.geocode(zip_code)
+
+        # Store the latitude and longitude in the corresponding columns of the dataframe
+        d.at[index, "latitude"] = location.latitude
+        d.at[index, "longitude"] = location.longitude
     #reduce memory of dataframe
     def reduce_mem_usage(d):
         for col in d.columns:
