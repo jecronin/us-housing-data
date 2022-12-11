@@ -20,7 +20,7 @@ def load_data():
     # Loop through each row in the dataframe
     for index, row in d.iterrows():
         # Use the geocoder library to lookup the latitude and longitude for the zip code in the current row
-        g = geocoder.arcgis(row['zipcode'])
+        g = geocoder.arcgis(row['postal_code'])
         # Set the latitude and longitude values for the current row
         d.at[index, 'latitude'] = g.lat
         d.at[index, 'longitude'] = g.lng
