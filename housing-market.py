@@ -13,17 +13,6 @@ cols = ['month_date_yyyymm', 'postal_code', 'median_listing_price',  'active_lis
 def load_data():
     d = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] #read in csv and drop the last row of contact information
     d['month_date_yyyymm'] = pd.to_datetime(d['month_date_yyyymm'], format='%Y%m') #convert date to datetime
-        # Create two new columns in the dataframe for latitude and longitude
-    d['latitude'] = None
-    d['longitude'] = None
-
-    # Loop through each row in the dataframe
-    for index, row in d.iterrows():
-        # Use the geocoder library to lookup the latitude and longitude for the zip code in the current row
-        g = geocoder.arcgis(row['postal_code'])
-        # Set the latitude and longitude values for the current row
-        d.at[index, 'latitude'] = g.lat
-        d.at[index, 'longitude'] = g.lng
     #reduce memory of dataframe
     def reduce_mem_usage(d):
         for col in d.columns:
