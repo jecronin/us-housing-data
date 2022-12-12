@@ -7,12 +7,18 @@ import geocoder
 st.set_page_config(layout="wide")
 # -- Read in the data
 url = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Core/RDC_Inventory_Core_Metrics_Zip_History.csv"
+url_hot = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Hotness/RDC_Inventory_Hotness_Metrics_Zip_History.csv"
 cols = ['month_date_yyyymm', 'postal_code', 'median_listing_price',  'active_listing_count','median_days_on_market', 'new_listing_count', 'price_increased_count', 'price_reduced_count'] #add back zip name when want to use
+cols_hot = ['month_date_yyyymm', 'postal_code', 'hotness_rank', 'hotness_rank_mm', 'hotness_rank_yy', 'hotness_score',
+       'supply_score', 'demand_score']
 #data_dic = {'month_date_yyyymm':'string', 'postal_code':'string', 'zip_name':'string','median_listing_price':'int64',  'active_listing_count':'int32','median_days_on_market':'int32'}
 @st.cache
 def load_data():
-    d = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] #read in csv and drop the last row of contact information
-    d['month_date_yyyymm'] = pd.to_datetime(d['month_date_yyyymm'], format='%Y%m') #convert date to datetime
+    inv = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] #read in csv and drop the last row of contact information
+    inv['month_date_yyyymm'] = pd.to_datetime(inv['month_date_yyyymm'], format='%Y%m') #convert date to datetime
+    h = pd.read_csv(url_hot, low_memory=False, usecols=cols_hot, sep=',')[:-1] #read in csv and drop the last row of contact information
+    h['month_date_yyyymm'] = pd.to_datetime(h['month_date_yyyymm'], format='%Y%m') #convert date to datetime
+    d = pd.merge(inv,h, how="inner", on=['month_date_yyyymm', 'postal_code'])
     #reduce memory of dataframe
     def reduce_mem_usage(d):
         for col in d.columns:
@@ -119,3 +125,12 @@ fig6 = px.line(df_tgt,
 )
 # -- Input the Plotly chart to the Streamlit interface
 st.plotly_chart(fig6, use_container_width=True)
+
+fig7 = px.line(df_tgt,
+                x='month_date_yyyymm',
+                y='hotness_rank',
+                title = 'Hotness Rank' + " in " + zip_input,
+                markers=True
+)
+# -- Input the Plotly chart to the Streamlit interface
+st.plotly_chart(fig7, use_container_width=True)
