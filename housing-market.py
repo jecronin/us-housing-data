@@ -20,6 +20,9 @@ def load_data():
     h['month_date_yyyymm'] = pd.to_datetime(h['month_date_yyyymm'], format='%Y%m') #convert date to datetime
     d = pd.merge(inv,h, how="inner", on=['month_date_yyyymm', 'postal_code'])
     d['zip_code_name'] = d.postal_code.apply(str) + ' / ' + d.zip_name
+    d['zip_code_name'] = d.zip_code_name.astype('string')
+    d.drop('zip_name', axis=1, inplace=True)
+    d.drop('postal_code', axis=1, inplace=True)
     del inv
     del h
     #reduce memory of dataframe
