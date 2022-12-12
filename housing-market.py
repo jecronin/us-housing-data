@@ -19,7 +19,7 @@ def load_data():
     h = pd.read_csv(url_hot, low_memory=False, usecols=cols_hot, sep=',')[:-1] #read in csv and drop the last row of contact information
     h['month_date_yyyymm'] = pd.to_datetime(h['month_date_yyyymm'], format='%Y%m') #convert date to datetime
     d = pd.merge(inv,h, how="inner", on=['month_date_yyyymm', 'postal_code'])
-    d['zip_code_name'] = d.postal_code + ' / ' + d.zip_name
+    d['zip_code_name'] = d.postal_code.apply(str) + ' / ' + d.zip_name
     del inv
     del h
     #reduce memory of dataframe
