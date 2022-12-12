@@ -8,7 +8,7 @@ st.set_page_config(layout="wide")
 # -- Read in the data
 url = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Core/RDC_Inventory_Core_Metrics_Zip_History.csv"
 url_hot = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Hotness/RDC_Inventory_Hotness_Metrics_Zip_History.csv"
-cols = ['month_date_yyyymm', 'postal_code', 'median_listing_price',  'active_listing_count','median_days_on_market', 'new_listing_count', 'price_increased_count', 'price_reduced_count'] #add back zip name when want to use
+cols = ['month_date_yyyymm', 'postal_code', 'zip_name', 'median_listing_price',  'active_listing_count','median_days_on_market', 'new_listing_count', 'price_increased_count', 'price_reduced_count'] #add back zip name when want to use
 cols_hot = ['month_date_yyyymm', 'postal_code', 'hotness_rank', 'hotness_rank_mm', 'hotness_rank_yy', 'hotness_score',
        'supply_score', 'demand_score']
 #data_dic = {'month_date_yyyymm':'string', 'postal_code':'string', 'zip_name':'string','median_listing_price':'int64',  'active_listing_count':'int32','median_days_on_market':'int32'}
@@ -19,6 +19,7 @@ def load_data():
     h = pd.read_csv(url_hot, low_memory=False, usecols=cols_hot, sep=',')[:-1] #read in csv and drop the last row of contact information
     h['month_date_yyyymm'] = pd.to_datetime(h['month_date_yyyymm'], format='%Y%m') #convert date to datetime
     d = pd.merge(inv,h, how="inner", on=['month_date_yyyymm', 'postal_code'])
+    d['zip_code_name'] = d.postal_code + ' / ' + d.zip_name
     del inv
     del h
     #reduce memory of dataframe
@@ -55,24 +56,19 @@ def load_data():
     reduce_mem_usage(d)
     return d
 df = load_data()
-#data.drop(data.tail(1).index,inplace=True) # drop last row that has data RDC contact info                                 
-#tgt_zips = sorted(['74728', '94123', '11211', '11249', '30560', '39110', '95670', '35004', '35007', '35094', '12758', '37738', '37862', '12440'])#set target list of zips
-#df = data[data.postal_code.isin(tgt_zips)] #filter df
-#del data #delete large dataframe to save memory
-#Create 3 columns
+#Create 2 columns
 col1, col2 = st.columns([20,5])
-# -- Put the image in the middle column
-# - Commented out here so that the file will run without having the image downloaded
+#Title column
 with col1:
     st.title("Housing Market Trends by Zip Code")
-# -- Put the title in the last column
+#Zip selector column
 with col2:
-  zip_input = st.selectbox("What zip code?", sorted(list(df.postal_code.unique())))
+  zip_input = st.selectbox("What zip code?", sorted(list(df.zip_code_name.unique())))
 # -- We use the first column here as a dummy to add a space to the left
 st.markdown("This dashboard pulls in summary market metrics for all zip codes in the US and shows their trends over time. Use it to track median prices, price changes,  new listings and active inventory in your zip code of interest.")
 st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/data/)")
 
-df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', ascending=True)
+df_tgt = df[df['zip_code_name'] == zip_input].sort_values('month_date_yyyymm', ascending=True)
 fig = px.line(df_tgt,
                 x='month_date_yyyymm',
                 y='median_listing_price',
