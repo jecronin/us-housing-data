@@ -49,30 +49,20 @@ def load_data():
     return d
 df = load_data()
 #Create 2 columns
-st.title("Market Hotness Trends")
-col1, col2 = st.columns([5,5])
-#Title column
-Date = df["month_date_yyyymm"].unique().tolist()
 
-min_value = datetime.strptime(min(Date), '%Y-%m-%d')  # str to datetime
-max_value = datetime.strptime(max(Date), '%Y-%m-%d')
-value = (min_value, max_value)
+col1,col2 = st.columns([5,5])
 
 with col1:
-  price_slide = st.slider(
-    'Date:',
-    min_value=min_value,
-    max_value=max_value,
-    value=value)
-#Zip selector column
+       st.title("Market Hotness Trends")
 with col2:
-  zip_input = st.selectbox("What zip code?", sorted(list(df.postal_code.unique())))
-
+       zip_input = st.selectbox("What zip code?", sorted(list(df.postal_code.unique())))
+       
 # -- We use the first column here as a dummy to add a space to the left
 st.markdown("This dashboard pulls in market hotness metrics across the US")
 st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/data/)")
 
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', ascending=True)
+st.dataframe(df_tgt)
 fig = px.line(df_tgt,
                 x='month_date_yyyymm',
                 y='hotness_score',
