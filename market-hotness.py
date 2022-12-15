@@ -49,7 +49,7 @@ def load_data():
 df = load_data()
 #Create 2 columns
 st.title("Market Hotness Trends")
-col1, col2 = st.columns([5,5,5,5])
+col1, col2, col3, col4 = st.columns([5,5,5,5])
 #Title column
 with col1:
   date_slide = st.slider("Pick a date range:", value=df.month_date_yyyymm.max(), min_value=df.month_date_yyyymm.min(), max_value=df.month_date_yyyymm.max())
