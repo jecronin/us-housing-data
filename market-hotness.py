@@ -56,6 +56,10 @@ with col1:
 #Zip selector column
 with col2:
   zip_input = st.selectbox("What zip code?", sorted(list(df.postal_code.unique())))
+with col3:
+  supply_slide = st.slider("Pick a supply range:", value=df.supply_score.max(), min_value=df.supply_score.min(), max_value=df.supply_score.max())
+with col4:
+  demand_slide = st.slider("Pick a demand range:", value=df.demand_score.max(), min_value=df.demand_score.min(), max_value=df.demand_score.max())
 # -- We use the first column here as a dummy to add a space to the left
 st.markdown("This dashboard pulls in market hotness metrics across the US")
 st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/data/)")
