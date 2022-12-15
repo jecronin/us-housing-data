@@ -49,17 +49,24 @@ def load_data():
 df = load_data()
 #Create 2 columns
 st.title("Market Hotness Trends")
-col1, col2, col3, col4 = st.columns([5,5,5,5])
+col1, col2 = st.columns([5,5])
 #Title column
+Date = df["month_date_yyyymm"].unique().tolist()
+
+min_value = datetime.strptime(min(Date), '%Y-%m-%d')  # str to datetime
+max_value = datetime.strptime(max(Date), '%Y-%m-%d')
+value = (min_value, max_value)
+
 with col1:
-  price_slide = st.slider("Pick a price range:", value=df.median_listing_price.max(), min_value=df.median_listing_price.min(), max_value=df.median_listing_price.max())
+  price_slide = st.slider(
+    'Date:',
+    min_value=min_value,
+    max_value=max_value,
+    value=value)
 #Zip selector column
 with col2:
   zip_input = st.selectbox("What zip code?", sorted(list(df.postal_code.unique())))
-with col3:
-  supply_slide = st.slider("Pick a supply range:", value=df.supply_score.max(), min_value=df.supply_score.min(), max_value=df.supply_score.max())
-with col4:
-  demand_slide = st.slider("Pick a demand range:", value=df.demand_score.max(), min_value=df.demand_score.min(), max_value=df.demand_score.max())
+
 # -- We use the first column here as a dummy to add a space to the left
 st.markdown("This dashboard pulls in market hotness metrics across the US")
 st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/data/)")
