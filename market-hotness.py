@@ -52,7 +52,7 @@ st.title("Market Hotness Trends")
 col1, col2, col3, col4 = st.columns([5,5,5,5])
 #Title column
 with col1:
-  date_slide = st.slider("Pick a date range:", value=df.month_date_yyyymm.max(), min_value=df.month_date_yyyymm.min(), max_value=df.month_date_yyyymm.max())
+  price_slide = st.slider("Pick a price range:", value=df.median_listing_price.max(), min_value=df.median_listing_price.min(), max_value=df.median_listing_price.max())
 #Zip selector column
 with col2:
   zip_input = st.selectbox("What zip code?", sorted(list(df.postal_code.unique())))
