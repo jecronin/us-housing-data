@@ -14,7 +14,6 @@ cols = ['month_date_yyyymm', 'postal_code', 'hotness_rank', 'hotness_rank_mm', '
 def load_data():
     d = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] #read in csv and drop the last row of contact information
     d['month_date_yyyymm'] = pd.to_datetime(d['month_date_yyyymm'], format='%Y%m') #convert date to datetime
-    d['zip_name'] = d['zip_name'].fillna('N/a')
     d = d.drop_duplicates()
     d['state'] = df['zip_name'].str[-2:]
     for col in ['hotness_rank_mm', 'hotness_rank_yy']:
