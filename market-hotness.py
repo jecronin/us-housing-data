@@ -68,7 +68,7 @@ st.markdown("This dashboard pulls in market hotness metrics across the US")
 st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/data/)")
 
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', ascending=True)
-st.dataframe(df[df['demand_score'] >= demand_slider].sort_values('month_date_yyyymm', ascending=True))
+st.dataframe(df[(df['supply_score'] >= supply_slider)&(df['demand_score'] >= demand_slider)].sort_values('month_date_yyyymm', ascending=True))
 fig = px.line(df_tgt,
                 x='month_date_yyyymm',
                 y='hotness_score',
