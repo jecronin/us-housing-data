@@ -62,14 +62,14 @@ col1,col2,col3 = st.columns([5,5,5])
 with col1:
        zip_input = st.selectbox("What zip code?", sorted(list(df.postal_code.unique())))
 with col2:
-       supply_slider = st.slider("Supply score: ", value=0, min_value=0,max_value=100)
+       supply_slider = st.slider("Supply score: ", value=0, min_value=0,max_value=100, step=10)
 with col3:
-       demand_slider = st.slider("Demand score: ", value=0, min_value=0,max_value=100)
+       demand_slider = st.slider("Demand score: ", value=0, min_value=0,max_value=100, step=10)
        
 # -- We use the first column here as a dummy to add a space to the left
 st.markdown("This dashboard pulls in market hotness metrics across the US")
 st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/data/)")
-price_slider = st.slider("Median price: ", value=[0,500000], min_value=0, max_value=1000000)
+price_slider = st.slider("Median price: ", value=[0,500000], min_value=0, max_value=1000000, step=10000)
 
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', ascending=True)
 st.dataframe(df[(df['supply_score'] >= supply_slider)&(df['demand_score'] >= demand_slider) & (df['median_listing_price'].between(price_slider[0],price_slider[1]))].sort_values('month_date_yyyymm', ascending=False))
