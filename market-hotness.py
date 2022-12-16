@@ -71,7 +71,7 @@ st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/d
 price_slider = st.slider("Median price: ", value=[0,500*10^3], min_value=0, max_value=1000*10^3)
 
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', ascending=True)
-st.dataframe(df[(df['supply_score'] >= supply_slider)&(df['demand_score'] >= demand_slider) & (df['median_listing_price'].between(price_slider[0],price_slider[1])].sort_values('month_date_yyyymm', ascending=False))
+st.dataframe(df[(df['supply_score'] >= supply_slider)&(df['demand_score'] >= demand_slider) & (df['median_listing_price'].between(price_slider[0],price_slider[1]))].sort_values('month_date_yyyymm', ascending=False))
 fig = px.line(df_tgt,
                 x='month_date_yyyymm',
                 y='hotness_score',
