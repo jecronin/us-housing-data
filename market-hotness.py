@@ -13,7 +13,7 @@ cols = ['month_date_yyyymm', 'postal_code', 'zip_name', 'hotness_rank', 'hotness
 @st.cache
 def load_data():
     d = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] #read in csv and drop the last row of contact information
-    d = d.drop_duplicates()
+    d = d.drop_duplicates().round(2)
     d['month_date_yyyymm'] = pd.to_datetime(d['month_date_yyyymm'], format='%Y%m') #convert date to datetime
     d['zip_name'] = d['zip_name'].fillna('N/A')
     d['state'] = d['zip_name'].str[-2:]
