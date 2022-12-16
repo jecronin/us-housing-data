@@ -14,7 +14,12 @@ cols = ['month_date_yyyymm', 'postal_code', 'hotness_rank', 'hotness_rank_mm', '
 def load_data():
     d = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] #read in csv and drop the last row of contact information
     d['month_date_yyyymm'] = pd.to_datetime(d['month_date_yyyymm'], format='%Y%m') #convert date to datetime
-    #reduce memory of dataframe
+    d['zip_name'] = d['zip_name'].fillna('N/a')
+    d = d.drop_duplicates()
+    d['state'] = df['zip_name'].str[-2:]
+    for col in ['hotness_rank_mm', 'hotness_rank_yy']:
+       df[col] = df[col].fillna(0)    
+#reduce memory of dataframe
     def reduce_mem_usage(d):
         for col in d.columns:
             col_type = d[col].dtype
@@ -57,7 +62,7 @@ with col1:
 with col2:
        zip_input = st.selectbox("What zip code?", sorted(list(df.postal_code.unique())))
 with col3:
-       demand_slider = st.slider("Demand score: ", value=50, min_value=0,max_value=100)
+       demand_slider = st.slider("Demand score: ", value=0, min_value=0,max_value=100)
        
 # -- We use the first column here as a dummy to add a space to the left
 st.markdown("This dashboard pulls in market hotness metrics across the US")
