@@ -16,7 +16,7 @@ def load_data():
     d['month_date_yyyymm'] = pd.to_datetime(d['month_date_yyyymm'], format='%Y%m') #convert date to datetime
     d = d.drop_duplicates()
     for col in ['hotness_rank_mm', 'hotness_rank_yy']:
-       df[col] = df[col].fillna(0)    
+       d[col] = d[col].fillna(0)    
 #reduce memory of dataframe
     def reduce_mem_usage(d):
         for col in d.columns:
