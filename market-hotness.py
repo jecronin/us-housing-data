@@ -54,13 +54,14 @@ def load_data():
     return d
 df = load_data()
 #Create 2 columns
+st.title("Market hotness data dashboard")
 
 col1,col2,col3 = st.columns([5,5,5])
 
 with col1:
-       st.title("Market Hotness Trends")
-with col2:
        zip_input = st.selectbox("What zip code?", sorted(list(df.postal_code.unique())))
+with col2:
+       supply_slider = st.slider("Supply score: ", value=0, min_value=0,max_value=100)
 with col3:
        demand_slider = st.slider("Demand score: ", value=0, min_value=0,max_value=100)
        
@@ -69,7 +70,7 @@ st.markdown("This dashboard pulls in market hotness metrics across the US")
 st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/data/)")
 
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', ascending=True)
-st.dataframe(df[df['demand_score'] >= demand_slider])
+st.dataframe(df[df['demand_score'] >= demand_slider].sort_values('month_date_yyyymm', ascending=True))
 fig = px.line(df_tgt,
                 x='month_date_yyyymm',
                 y='hotness_score',
