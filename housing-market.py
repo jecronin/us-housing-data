@@ -63,7 +63,7 @@ with col1:
 with col2:
   zip_input = st.selectbox("What zip code?", sorted(list(df.postal_code.unique())))
 # -- We use the first column here as a dummy to add a space to the left
-st.markdown("This dashboard pulls in summary market metrics for all zip codes in the US and shows their trends over time. Use it to track median prices, price changes,  new listings and active inventory in your zip code of interest.")
+st.markdown("This dashboard pulls in summary market metrics for all zip codes in the US and shows their trends over time. Use it to track median prices, price changes, new listings and active inventory in your zip code of interest.")
 st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/data/)")
 
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', ascending=True)
