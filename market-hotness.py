@@ -10,7 +10,7 @@ st.set_page_config(layout="wide")
 url = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Hotness/RDC_Inventory_Hotness_Metrics_Zip_History.csv"
 cols = ['month_date_yyyymm', 'postal_code', 'zip_name', 'hotness_rank', 'hotness_rank_mm', 'hotness_rank_yy', 'hotness_score',
        'supply_score', 'demand_score', 'median_listing_price', 'median_days_on_market']
-@st.cache
+@st.cache_data
 def load_data():
     d = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] #read in csv and drop the last row of contact information
     d = d.drop_duplicates()
