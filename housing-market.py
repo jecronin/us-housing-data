@@ -11,7 +11,7 @@ url_hot = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Hotness/RDC_Inven
 cols = ['month_date_yyyymm', 'postal_code', 'median_listing_price',  'active_listing_count','median_days_on_market', 'new_listing_count', 'price_increased_count', 'price_reduced_count'] #add back zip name when want to use
 cols_hot = ['month_date_yyyymm', 'postal_code', 'hotness_rank', 'hotness_rank_mm', 'hotness_rank_yy', 'hotness_score',
        'supply_score', 'demand_score']
-@st.cache
+@st.cache_data
 def load_data():
     inv = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] #read in csv and drop the last row of contact information
     inv['month_date_yyyymm'] = pd.to_datetime(inv['month_date_yyyymm'], format='%Y%m') #convert date to datetime
