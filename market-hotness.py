@@ -90,6 +90,6 @@ st.plotly_chart(fig, use_container_width=True)
 
 px.set_mapbox_access_token(requests.get("https://raw.githubusercontent.com/jecronin/us-housing-data/main/mapbox.mapbox_token").text)
 
-fig2 = (df[df.month_date_yyyymm == df.month_date_yyyymm.max()][['lat','lng']]
+fig2 = df[df.month_date_yyyymm == df.month_date_yyyymm.max()][['lat','lng']]
 # -- Input the Plotly chart to the Streamlit interface
 st.map(fig2, use_container_width=True)
