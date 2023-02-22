@@ -92,4 +92,4 @@ px.set_mapbox_access_token(requests.get("https://raw.githubusercontent.com/jecro
 
 fig2 = px.scatter_mapbox(df[df.month_date_yyyymm == df.month_date_yyyymm.max()].dropna(how='all')), lat="lat", lon="lng",color="hotness_rank", size='median_listing_price',hover_data=['postal_code'], zoom=4, title = "Zip code growth", color_continuous_scale="RdYlGn")
 # -- Input the Plotly chart to the Streamlit interface
-st.plotly_chart(fig2, use_container_width=True)
+st.map(fig2, use_container_width=True)
