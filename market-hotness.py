@@ -5,7 +5,6 @@ import plotly.express as px
 import numpy as np
 import geocoder
 from datetime import datetime
-import requests
 st.set_page_config(layout="wide")
 # -- Read in the data
 url = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Hotness/RDC_Inventory_Hotness_Metrics_Zip_History.csv"
