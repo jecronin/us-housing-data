@@ -21,7 +21,7 @@ def load_data():
        d[col] = d[col].fillna(0) 
     z = pd.read_csv('https://raw.githubusercontent.com/jecronin/us-housing-data/main/uszips%20(1).csv', usecols=['zip','lat','lng'], sep=',',low_memory=False)
     z['zip'] = z.zip.astype('str')
-    d = pd.merge(d, z[['zip', 'lat','lng']], how='inner', on='zip')
+    d = pd.merge(d, z, how='inner', on='zip')
 #reduce memory of dataframe
     def reduce_mem_usage(d):
         for col in d.columns:
