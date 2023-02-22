@@ -18,7 +18,10 @@ def load_data():
     d['zip_name'] = d['zip_name'].fillna('N/A')
     d['state'] = d['zip_name'].str[-2:]
     for col in ['hotness_rank_mm', 'hotness_rank_yy']:
-       d[col] = d[col].fillna(0)    
+       d[col] = d[col].fillna(0) 
+    z = pd.read_csv('https://github.com/jecronin/us-housing-data/blob/main/uszips%20(1).csv', cols=['zip','lat','lng'])
+    z['zip'] = z.zip.astype('str')
+    d = pd.merge(d, z[['zip', 'lat','lng']], how='inner', on='zip')
 #reduce memory of dataframe
     def reduce_mem_usage(d):
         for col in d.columns:
