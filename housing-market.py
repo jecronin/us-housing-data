@@ -66,8 +66,8 @@ with col2:
 st.markdown("This dashboard pulls in summary market metrics for all zip codes in the US and shows their trends over time. Use it to track median prices, price changes, new listings and active inventory in your zip code of interest.")
 st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/data/)")
 data = {
-    'Location': ['Broken Bow, OK', 'Blue Ridge, GA', 'Sevierville, TN', 'Gatlinburg, TN', 'Pigeon Forge, TN', 'Madison, MS', 'Canton, MS', 'Morganton, GA'],
-    'Zip Code(s)': ['74728, 74735', '30513, 30522', '37862, 37876, 37864', '37738', '37863, 37868', '39110', '39046', '30560']
+    'Location': ['Broken Bow, OK', 'Blue Ridge, GA', 'Sevierville, TN', 'Gatlinburg, TN', 'Pigeon Forge, TN', 'Madison, MS', 'Canton, MS', 'North Myrtle', 'Surfside Beach' ],
+    'Zip Code(s)': ['74728', '30513, 30522, 30560', '37862, 37876, 37864', '37738', '37863, 37868', '39110', '39046', '29572', '29575']
 }
 
 codes = pd.DataFrame(data)
