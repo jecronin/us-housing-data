@@ -69,11 +69,9 @@ data = {
     'Location': ['Broken Bow, OK', 'Blue Ridge, GA', 'Sevierville, TN', 'Gatlinburg, TN', 'Pigeon Forge, TN', 'Madison, MS', 'Canton, MS', 'North Myrtle', 'Surfside Beach' ],
     'Zip Code(s)': ['74728', '30513, 30522, 30560', '37862, 37876, 37864', '37738', '37863, 37868', '39110', '39046', '29582', '29575']
 }
-
 codes = pd.DataFrame(data)
-st.dataframe(codes)
+st.table(codes)
 
-st.table(df)
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', ascending=True)
 fig = px.line(df_tgt,
                 x='month_date_yyyymm',
