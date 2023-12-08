@@ -97,7 +97,10 @@ fig5 = px.scatter_mapbox(
     hover_name="zip_name",
        color="hotness_score",
        hover_data=['hotness_rank', 'hotness_rank_yy', 'median_listing_price'],
+       zoom=3,
     title='Market Hotness by Zip',
     color_continuous_scale='RdYlGn'
 )
+# Set the map's center to the USA
+fig5.update_geos(center=dict(lon=-98.5795, lat=39.8283))
 st.plotly_chart(fig5, use_container_width=True)
