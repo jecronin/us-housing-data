@@ -94,7 +94,7 @@ fig5 = px.scatter_mapbox(
     df[df['month_date_yyyymm'] == df['month_date_yyyymm'].max()],
     lat="lat",
     lon="lng",
-    hover_name=df['zip_name'] + ' - ' + df['zip_name'],
+    hover_name='postal_code',
        color="hotness_score",
        hover_data=['hotness_rank', 'hotness_rank_yy', 'median_listing_price'],
        zoom=3,
