@@ -55,7 +55,8 @@ def load_data():
                     else:
                         d[col] = d[col].astype(np.float64)
     reduce_mem_usage(d)
-    d = d.round(2)
+    columns_to_round = [col for col in d.columns if col not in ['lat', 'lng']]
+    d[columns_to_round] = d[columns_to_round].round(2)
     return d
 df = load_data()
 #Create 2 columns
