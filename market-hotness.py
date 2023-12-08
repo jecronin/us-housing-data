@@ -95,7 +95,8 @@ fig5 = px.scatter_mapbox(
     lat="lat",
     lon="lng",
     hover_name="zip_name",
-    zoom=3,
+       color="hotness_score",
+       hover_date=['hotness_rank', 'hotness_rank_yy', 'median_listing_price'],
     title='Market Hotness by Zip',
     color_continuous_scale='RdYlGn'
 )
