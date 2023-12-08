@@ -89,6 +89,13 @@ st.plotly_chart(fig, use_container_width=True)
 
 #Open mapbox token and create a scatter
 px.set_mapbox_access_token(open('https://github.com/jecronin/us-housing-data/blob/main/mapbox.mapbox_token'))
-fig5 = px.scatter_mapbox(df[(df['month_date_yyyymm'] == df['month_date_yyyymm'].max()), lat="lat", lon="lng", hover_name="zip_name",zoom=3, title= 'Market Hotness by Zip', color_continuous_scale='RdYlGn')
+fig5 = px.scatter_mapbox(
+    df[df['month_date_yyyymm'] == df['month_date_yyyymm'].max()],
+    lat="lat",
+    lon="lng",
+    hover_name="zip_name",
+    zoom=3,
+    title='Market Hotness by Zip',
+    color_continuous_scale='RdYlGn'
+)
 st.map(fig5, use_container_width=True)
-
