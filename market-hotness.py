@@ -88,7 +88,7 @@ fig = px.line(df_tgt,
 st.plotly_chart(fig, use_container_width=True)
 
 #Open mapbox token and create a scatter
-px.set_mapbox_access_token('pk.eyJ1IjoiamVjcm9uaW4iLCJhIjoiY2w4b3JiZXp0MTFnNDN1bGcwOXN0YjNjNiJ9.kuzM3qJSeM2emsreoN8FoA'))
+px.set_mapbox_access_token('pk.eyJ1IjoiamVjcm9uaW4iLCJhIjoiY2w4b3JiZXp0MTFnNDN1bGcwOXN0YjNjNiJ9.kuzM3qJSeM2emsreoN8FoA')
 fig5 = px.scatter_mapbox(
     df[df['month_date_yyyymm'] == df['month_date_yyyymm'].max()],
     lat="lat",
