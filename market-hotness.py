@@ -99,4 +99,4 @@ fig5 = px.scatter_mapbox(
     title='Market Hotness by Zip',
     color_continuous_scale='RdYlGn'
 )
-st.map(fig5, use_container_width=True)
+st.plotly_chart(fig5, use_container_width=True)
