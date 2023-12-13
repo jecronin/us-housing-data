@@ -76,16 +76,18 @@ st.markdown("This dashboard pulls in market hotness metrics across the US")
 st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/data/)")
 price_slider = st.slider("Median price: ", value=[0,500000], min_value=0, max_value=1000000, step=10000)
 
-st.map(df[(df['postal_code'] == zip_input) & (df['month_date_yyyymm'] == df['month_date_yyyymm'].max())], latitude="lat", longitude="lng", size="hotness_score")
-
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', ascending=True)
 st.dataframe(df[(df['month_date_yyyymm'] == df['month_date_yyyymm'].max()) & (df['supply_score'] >= supply_slider) & (df['demand_score'] >= demand_slider) & (df['median_listing_price'].between(price_slider[0], price_slider[1]))].sort_values('hotness_score', ascending=False))
+st.map(df[(df['postal_code'] == zip_input) & (df['month_date_yyyymm'] == df['month_date_yyyymm'].max())], latitude="lat", longitude="lng", size="hotness_score", zoom=7)
+
 fig = px.line(df_tgt,
                 x='month_date_yyyymm',
                 y='hotness_score',
                 title = "Hotness score in " + zip_input,
                 markers=True
 )
+
+
 
 # -- Input the Plotly chart to the Streamlit interface
 st.plotly_chart(fig, use_container_width=True)
