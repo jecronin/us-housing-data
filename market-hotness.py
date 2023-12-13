@@ -111,4 +111,4 @@ fig5 = px.scatter_mapbox(
 fig5.update_geos(center=dict(lon=-98.5795, lat=39.8283))
 st.plotly_chart(fig5, use_container_width=True)
 
-st.map(df, lat="lat", lng="lng", size="hotness_score")
+st.map(df, latitude="lat", longitude="lng", size="hotness_score")
