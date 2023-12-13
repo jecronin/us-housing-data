@@ -76,6 +76,8 @@ st.markdown("This dashboard pulls in market hotness metrics across the US")
 st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/data/)")
 price_slider = st.slider("Median price: ", value=[0,500000], min_value=0, max_value=1000000, step=10000)
 
+st.map(df[(df['postal_code'] == zip_input) & (df['month_date_yyyymm'] == df['month_date_yyyymm'].max())], latitude="lat", longitude="lng", size="hotness_score")
+
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', ascending=True)
 st.dataframe(df[(df['month_date_yyyymm'] == df['month_date_yyyymm'].max()) & (df['supply_score'] >= supply_slider) & (df['demand_score'] >= demand_slider) & (df['median_listing_price'].between(price_slider[0], price_slider[1]))].sort_values('hotness_score', ascending=False))
 fig = px.line(df_tgt,
@@ -110,5 +112,3 @@ fig5 = px.scatter_mapbox(
 # Set the map's center to the USA
 fig5.update_geos(center=dict(lon=-98.5795, lat=39.8283))
 st.plotly_chart(fig5, use_container_width=True)
-
-st.map(df, latitude="lat", longitude="lng", color="hotness_score")
