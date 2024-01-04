@@ -22,10 +22,10 @@ def load_data():
     melt1 = pd.melt(df, id_vars=['areaName', 'Borough', 'areaType','bed'], value_vars=series_list, value_name='Rent').sort_values(['areaName','variable'])
     melt2 = pd.melt(df2, id_vars=['areaName', 'Borough', 'areaType','bed'], value_vars=series_list, value_name='Rent').sort_values(['areaName','variable'])
     melt3 = pd.melt(df3, id_vars=['areaName', 'Borough', 'areaType','bed'], value_vars=series_list, value_name='Rent').sort_values(['areaName','variable'])
-    df_melt = pd.concat([melt1,melt2,melt3])
-    df_melt.columns = ['areaName', 'Borough', 'areaType', 'bed', 'Month', 'Rent']
-    df_melt['Month'] = pd.to_datetime(df_melt.Month)
-    df_melt['Year'] = df_melt['Month'].dt.year
+    d = pd.concat([melt1,melt2,melt3])
+    d.columns = ['areaName', 'Borough', 'areaType', 'bed', 'Month', 'Rent']
+    d['Month'] = pd.to_datetime(d.Month)
+    d['Year'] = d['Month'].dt.year
 #reduce memory of dataframe
     def reduce_mem_usage(d):
         for col in d.columns:
@@ -57,9 +57,9 @@ def load_data():
                         d[col] = d[col].astype(np.float32)
                     else:
                         d[col] = d[col].astype(np.float64)
-    reduce_mem_usage(df_melt)
-    columns_to_round = [col for col in df_melt.columns if col not in ['lat', 'lng']]
-    df_melt[columns_to_round] = df_melt[columns_to_round].round(2)
+    reduce_mem_usage(d)
+    columns_to_round = [col for col in d.columns if col not in ['lat', 'lng']]
+    d[columns_to_round] = d[columns_to_round].round(2)
     return d
 df = load_data()
 #Create 2 columns
