@@ -61,7 +61,8 @@ def load_data():
     columns_to_round = [col for col in d.columns if col not in ['lat', 'lng']]
     d[columns_to_round] = d[columns_to_round].round(2)
     return d
-df = load_data()
+df_melt = load_data()
 #Create 2 columns
 st.title("NYC Rent Data Dashboard")
-st.dataframe(df)
+st.dataframe(df_melt)
+st.dataframe(df_melt.groupby(['areaName', 'Borough', 'areaType','bed', 'Year']).agg({'Rent':'mean'}).reset_index())
