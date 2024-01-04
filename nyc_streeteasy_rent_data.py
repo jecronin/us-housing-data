@@ -22,7 +22,7 @@ def load_data():
     melt1 = pd.melt(df, id_vars=['areaName', 'Borough', 'areaType','bed'], value_vars=series_list, value_name='Rent').sort_values(['areaName','variable'])
     melt2 = pd.melt(df2, id_vars=['areaName', 'Borough', 'areaType','bed'], value_vars=series_list, value_name='Rent').sort_values(['areaName','variable'])
     melt3 = pd.melt(df3, id_vars=['areaName', 'Borough', 'areaType','bed'], value_vars=series_list, value_name='Rent').sort_values(['areaName','variable'])
-    df_melt = melt1.append(melt2).append(melt3)
+    df_melt = melt1.concat(melt2).concat(melt3)
     df_melt.columns = ['areaName', 'Borough', 'areaType', 'bed', 'Month', 'Rent']
     df_melt['Month'] = pd.to_datetime(df_melt.Month)
     df_melt['Year'] = df_melt['Month'].dt.year
