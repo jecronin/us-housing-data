@@ -15,6 +15,9 @@ def load_data():
     df = pd.read_csv(url)
     df2 = pd.read_csv(url2)
     df3 = pd.read_csv(url3)
+    df['bed'] = 1
+    df2['bed'] = 2
+    df3['bed'] = 3
     series_list = df.drop(columns=['areaName', 'Borough', 'areaType', 'bed']).columns.to_list()
     melt1 = pd.melt(df, id_vars=['areaName', 'Borough', 'areaType','bed'], value_vars=series_list, value_name='Rent').sort_values(['areaName','variable'])
     melt2 = pd.melt(df2, id_vars=['areaName', 'Borough', 'areaType','bed'], value_vars=series_list, value_name='Rent').sort_values(['areaName','variable'])
