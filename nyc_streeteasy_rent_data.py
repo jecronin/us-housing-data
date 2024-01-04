@@ -13,16 +13,16 @@ url3 = "https://cdn-charts.streeteasy.com/rentals/ThreePlusBd/medianAskingRent_T
 @st.cache_data
 def load_data():
     df = pd.read_csv(url)
-  df2 = pd.read_csv(url2)
-  df3 = pd.read_csv(url3)
-  series_list = df.drop(columns=['areaName', 'Borough', 'areaType', 'bed']).columns.to_list()
-  melt1 = pd.melt(df, id_vars=['areaName', 'Borough', 'areaType','bed'], value_vars=series_list, value_name='Rent').sort_values(['areaName','variable'])
-  melt2 = pd.melt(df2, id_vars=['areaName', 'Borough', 'areaType','bed'], value_vars=series_list, value_name='Rent').sort_values(['areaName','variable'])
-  melt3 = pd.melt(df3, id_vars=['areaName', 'Borough', 'areaType','bed'], value_vars=series_list, value_name='Rent').sort_values(['areaName','variable'])
-  df_melt = melt1.append(melt2).append(melt3)
-  df_melt.columns = ['areaName', 'Borough', 'areaType', 'bed', 'Month', 'Rent']
-  df_melt['Month'] = pd.to_datetime(df_melt.Month)
-  df_melt['Year'] = df_melt['Month'].dt.year
+    df2 = pd.read_csv(url2)
+    df3 = pd.read_csv(url3)
+    series_list = df.drop(columns=['areaName', 'Borough', 'areaType', 'bed']).columns.to_list()
+    melt1 = pd.melt(df, id_vars=['areaName', 'Borough', 'areaType','bed'], value_vars=series_list, value_name='Rent').sort_values(['areaName','variable'])
+    melt2 = pd.melt(df2, id_vars=['areaName', 'Borough', 'areaType','bed'], value_vars=series_list, value_name='Rent').sort_values(['areaName','variable'])
+    melt3 = pd.melt(df3, id_vars=['areaName', 'Borough', 'areaType','bed'], value_vars=series_list, value_name='Rent').sort_values(['areaName','variable'])
+    df_melt = melt1.append(melt2).append(melt3)
+    df_melt.columns = ['areaName', 'Borough', 'areaType', 'bed', 'Month', 'Rent']
+    df_melt['Month'] = pd.to_datetime(df_melt.Month)
+    df_melt['Year'] = df_melt['Month'].dt.year
 #reduce memory of dataframe
     def reduce_mem_usage(d):
         for col in d.columns:
