@@ -75,14 +75,14 @@ selected_area_name = st.selectbox("Select Area Name", df_year['areaName'].unique
 selected_bed = st.selectbox("Select Bed Type", df_year['bed'].unique())
 
 filtered_df = df_year[
-    (df_year['areaName'] == selected_area_name) &
-    (df_year['bed'] == selected_bed)
+    (df_year['areaName'] == selected_area_name)
 ]
 
 # Create line chart based on the selected filters
-line_fig_filtered = px.line(filtered_df, x='Year', y='Rent',
+for b in [1,2,3]:
+    line_fig_filtered = px.line(filtered_df[filtered_df.bed == b], x='Year', y='Rent',
                             labels={'Year': 'Year', 'Rent': 'Rent'},
-                            title=f'Rent Trend Over Time for {selected_bed} Bedroom in {selected_area_name}')
+                            title=f'Rent Trend Over Time for ' + str(b) + 'Bedroom in {selected_area_name}')
 
-# Display the filtered line chart in your Streamlit app
-st.plotly_chart(line_fig_filtered)
+    # Display the filtered line chart in your Streamlit app
+    st.plotly_chart(line_fig_filtered)
