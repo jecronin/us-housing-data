@@ -26,6 +26,7 @@ def load_data():
     d.columns = ['areaName', 'Borough', 'areaType', 'bed', 'Month', 'Rent']
     d['Month'] = pd.to_datetime(d.Month)
     d['Year'] = d['Month'].dt.year
+    d['Year'] = d['Year'].str.replace(',', '').astype(int)
     hood_df = pd.read_csv('https://raw.githubusercontent.com/jecronin/us-housing-data/main/nyc_neighborhood_coordinates.csv', usecols=['neighborhood','latitude','longitude'], sep=',',low_memory=False)
     d = pd.merge(d, hood_df, left_on="areaName", right_on="neighborhood", how="inner" )
     d = d.drop(columns="neighborhood")
