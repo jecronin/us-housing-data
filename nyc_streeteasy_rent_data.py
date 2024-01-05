@@ -74,6 +74,27 @@ st.dataframe(df_year)
 selected_area_name = st.selectbox("Select Area Name", df_year['areaName'].unique())
 
 filtered_df = df_year[(df_year['areaName'] == selected_area_name)]
+# Find the most recent year in the filtered data
+most_recent_year = filtered_data['Year'].max()
+
+# Filter the data for the most recent year and specific bedrooms
+recent_data = filtered_data[filtered_data['Year'] == most_recent_year]
+
+# Filter the data for 1, 2, and 3 bedrooms
+bed1_data = recent_data[recent_data['bed'] == 1]
+bed2_data = recent_data[recent_data['bed'] == 2]
+bed3_data = recent_data[recent_data['bed'] == 3]
+
+# Create a DataFrame for displaying in a 1x3 table
+table_data = pd.DataFrame({
+    '1 Bedroom': [bed1_data['Rent'].values[0] if not bed1_data.empty else None],
+    '2 Bedrooms': [bed2_data['Rent'].values[0] if not bed2_data.empty else None],
+    '3 Bedrooms': [bed3_data['Rent'].values[0] if not bed3_data.empty else None]
+})
+
+# Display the table using Streamlit
+st.write("Rent Values for Most Recent Year in", selected_area_name)
+st.write(table_data.T)
 
 st.map(df_melt[['areaName','latitude','longitude']][df_melt.areaName == selected_area_name], latitude="latitude", longitude="longitude", zoom=12)
 
