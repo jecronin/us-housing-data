@@ -70,3 +70,12 @@ df_melt = load_data()
 st.title("NYC Rent Data Dashboard")
 st.dataframe(df_melt)
 st.dataframe(df_melt.groupby(['areaName', 'Borough', 'areaType','bed', 'Year']).agg({'Rent':'mean'}).reset_index())
+def generate_line_charts(df):
+    line_fig = px.line(df, x='Year', y='Rent', color='bed', facet_row='Borough', facet_col='areaName',
+                       labels={'Year': 'Year', 'Rent': 'Rent', 'bed': 'Bedroom'},
+                       title='Rent Trends Over Time by Bedroom for Different Boroughs or Areas')
+    return line_fig
+
+# Display the line charts in your Streamlit app
+line_charts = generate_line_charts(df_melt)
+st.plotly_chart(line_charts)
