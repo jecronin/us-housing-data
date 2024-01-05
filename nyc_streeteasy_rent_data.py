@@ -81,9 +81,9 @@ most_recent_year = filtered_df['Year'].max()
 recent_data = filtered_df[filtered_df['Year'] == most_recent_year]
 
 # Filter the data for 1, 2, and 3 bedrooms
-bed1_data = recent_data[recent_data['bed'] == 1]
-bed2_data = recent_data[recent_data['bed'] == 2]
-bed3_data = recent_data[recent_data['bed'] == 3]
+bed1_data = filtered_df[filtered_df['bed'] == 1]
+bed2_data = filtered_df[filtered_df['bed'] == 2]
+bed3_data = filtered_df[filtered_df['bed'] == 3]
 
 # Calculate YoY, Yo2Y, and Yo5Y values for 1, 2, and 3 bedrooms
 def calculate_yoy_yo2y_yo5y(data):
