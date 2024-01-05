@@ -72,8 +72,8 @@ st.dataframe(df_melt)
 df_year = df_melt.groupby(['areaName', 'Borough', 'areaType','bed', 'Year']).agg({'Rent':'mean'}).reset_index()
 st.dataframe(df_year)
 selected_area_name = st.selectbox("Select Area Name", df_year['areaName'].unique())
-filtered_df = df_year[(df_year['areaName'] == selected_area_name)]
 
+filtered_df = df_year[(df_year['areaName'] == selected_area_name)]
 # Find the most recent year in the filtered data
 most_recent_year = filtered_df['Year'].max()
 
@@ -81,35 +81,20 @@ most_recent_year = filtered_df['Year'].max()
 recent_data = filtered_df[filtered_df['Year'] == most_recent_year]
 
 # Filter the data for 1, 2, and 3 bedrooms
-bed1_data = filtered_df[filtered_df['bed'] == 1]
-bed2_data = filtered_df[filtered_df['bed'] == 2]
-bed3_data = filtered_df[filtered_df['bed'] == 3]
+bed1_data = recent_data[recent_data['bed'] == 1]
+bed2_data = recent_data[recent_data['bed'] == 2]
+bed3_data = recent_data[recent_data['bed'] == 3]
 
-# Calculate YoY, Yo2Y, and Yo5Y values for 1, 2, and 3 bedrooms
-def calculate_yoy_yo2y_yo5y(data):
-    yoy = data['Rent'].pct_change(periods=1) * 100
-    yo2y = data['Rent'].pct_change(periods=2) * 100
-    yo5y = data['Rent'].pct_change(periods=5) * 100
-    return yoy.values[0] if not yoy.empty else None, yo2y.values[0] if not yo2y.empty else None, yo5y.values[0] if not yo5y.empty else None
-
-yoy_1b, yo2y_1b, yo5y_1b = calculate_yoy_yo2y_yo5y(bed1_data)
-yoy_2b, yo2y_2b, yo5y_2b = calculate_yoy_yo2y_yo5y(bed2_data)
-yoy_3b, yo2y_3b, yo5y_3b = calculate_yoy_yo2y_yo5y(bed3_data)
-
-# Create a DataFrame for displaying in a 4x3 table
+# Create a DataFrame for displaying in a 1x3 table
 table_data = pd.DataFrame({
-    '': ['1 Bedroom', '2 Bedrooms', '3 Bedrooms'],
-    'Rent': [bed1_data['Rent'].values[0] if not bed1_data.empty else None,
-             bed2_data['Rent'].values[0] if not bed2_data.empty else None,
-             bed3_data['Rent'].values[0] if not bed3_data.empty else None],
-    'YoY (%)': [yoy_1b, yoy_2b, yoy_3b],
-    'Yo2Y (%)': [yo2y_1b, yo2y_2b, yo2y_3b],
-    'Yo5Y (%)': [yo5y_1b, yo5y_2b, yo5y_3b]
+    '1 Bedroom': [bed1_data['Rent'].values[0] if not bed1_data.empty else None],
+    '2 Bedrooms': [bed2_data['Rent'].values[0] if not bed2_data.empty else None],
+    '3 Bedrooms': [bed3_data['Rent'].values[0] if not bed3_data.empty else None]
 })
 
 # Display the table using Streamlit
-st.write("Rent and Year-over-Year Changes for Most Recent Year in", selected_area_name)
-st.write(table_data.set_index(''))
+st.write("Rent Values for Most Recent Year in", selected_area_name)
+st.write(table_data.T)
 
 st.map(df_melt[['areaName','latitude','longitude']][df_melt.areaName == selected_area_name], latitude="latitude", longitude="longitude", zoom=12)
 
