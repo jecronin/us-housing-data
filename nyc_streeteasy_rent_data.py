@@ -70,12 +70,22 @@ df_melt = load_data()
 st.title("NYC Rent Data Dashboard")
 st.dataframe(df_melt)
 st.dataframe(df_melt.groupby(['areaName', 'Borough', 'areaType','bed', 'Year']).agg({'Rent':'mean'}).reset_index())
-def generate_line_charts(df):
-    line_fig = px.line(df, x='Year', y='Rent', color='bed', facet_row='Borough', facet_col='areaName',
-                       labels={'Year': 'Year', 'Rent': 'Rent', 'bed': 'Bedroom'},
-                       title='Rent Trends Over Time by Bedroom for Different Boroughs or Areas')
-    return line_fig
+selected_area_name = st.selectbox("Select Area Name", df_melt['areaName'].unique())
+selected_borough = st.selectbox("Select Borough", df_melt['Borough'].unique())
+selected_area_type = st.selectbox("Select Area Type", df_melt['areaType'].unique())
+selected_bed = st.selectbox("Select Bed Type", df_melt['bed'].unique())
 
-# Display the line charts in your Streamlit app
-line_charts = generate_line_charts(df_melt)
-st.plotly_chart(line_charts)
+filtered_df = df_melt[
+    (df_melt['areaName'] == selected_area_name) &
+    (df_melt['Borough'] == selected_borough) &
+    (df_melt['areaType'] == selected_area_type) &
+    (df_melt['bed'] == selected_bed)
+]
+
+# Create line chart based on the selected filters
+line_fig_filtered = px.line(filtered_df, x='Year', y='Rent',
+                            labels={'Year': 'Year', 'Rent': 'Rent'},
+                            title=f'Rent Trend Over Time for {selected_bed} Bedroom in {selected_area_name}, {selected_borough}')
+
+# Display the filtered line chart in your Streamlit app
+st.plotly_chart(line_fig_filtered)
