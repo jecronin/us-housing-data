@@ -72,17 +72,13 @@ st.dataframe(df_melt)
 df_year = df_melt.groupby(['areaName', 'Borough', 'areaType','bed', 'Year']).agg({'Rent':'mean'}).reset_index()
 st.dataframe(df_year)
 selected_area_name = st.selectbox("Select Area Name", df_year['areaName'].unique())
-selected_bed = st.selectbox("Select Bed Type", df_year['bed'].unique())
 
-filtered_df = df_year[
-    (df_year['areaName'] == selected_area_name)
-]
+filtered_df = df_year[(df_year['areaName'] == selected_area_name)]
 
-# Create line chart based on the selected filters
-for b in [1,2,3]:
-    line_fig_filtered = px.line(filtered_df[filtered_df.bed == b], x='Year', y='Rent',
-                            labels={'Year': 'Year', 'Rent': 'Rent'},
-                            title=f'Rent Trend Over Time for ' + str(b) + 'Bedroom in {selected_area_name}')
+fig = px.line(labels={'Year': 'Year', 'Rent': 'Rent'}, title=f'Rent Trend Over Time for Bedrooms in {selected_area_name}')
 
-    # Display the filtered line chart in your Streamlit app
-    st.plotly_chart(line_fig_filtered)
+for b in [1, 2, 3]:
+    df_filtered_bed = filtered_df[filtered_df.bed == b]
+    fig.add_scatter(x=df_filtered_bed['Year'], y=df_filtered_bed['Rent'], name=f"{b} Bedroom")
+
+st.plotly_chart(fig)
