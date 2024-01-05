@@ -78,7 +78,7 @@ filtered_df = df_year[(df_year['areaName'] == selected_area_name)]
 most_recent_year = filtered_df['Year'].max()
 
 # Filter the data for the most recent year and specific bedrooms
-recent_data = filtered_df[filtered_data['Year'] == most_recent_year]
+recent_data = filtered_df[filtered_df['Year'] == most_recent_year]
 
 # Filter the data for 1, 2, and 3 bedrooms
 bed1_data = recent_data[recent_data['bed'] == 1]
