@@ -75,7 +75,7 @@ selected_area_name = st.selectbox("Select Area Name", df_year['areaName'].unique
 
 filtered_df = df_year[(df_year['areaName'] == selected_area_name)]
 
-st.map(df_melt[['areaName','latitude','longitude']][df_melt.areaName == selected_area_name], latitude="latitude", longitude="longitude", zoom=10)
+st.map(df_melt[['areaName','latitude','longitude']][df_melt.areaName == selected_area_name], latitude="latitude", longitude="longitude", zoom=12)
 
 fig = px.line(labels={'Year': 'Year', 'Rent': 'Rent'}, title=f'Rent Trend Over Time for Bedrooms in {selected_area_name}')
 
