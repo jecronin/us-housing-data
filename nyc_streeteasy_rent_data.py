@@ -81,4 +81,7 @@ for b in [1, 2, 3]:
     df_filtered_bed = filtered_df[filtered_df.bed == b]
     fig.add_scatter(x=df_filtered_bed['Year'], y=df_filtered_bed['Rent'], name=f"{b} Bedroom")
 
+fig.update_xaxes(title_text='Year')
+fig.update_yaxes(title_text='Average rent ($)')
+
 st.plotly_chart(fig)
