@@ -1,5 +1,5 @@
-streamlit==1.25.0
 plotly>=5.24.1
+streamlit==1.25.0  # Keep this version
 pandas>=2.2.3
 geocoder>=1.38.1
-numpy>=2.0.2
+numpy>=1.19.3,<2  # Downgraded to ensure compatibility with Streamlit
