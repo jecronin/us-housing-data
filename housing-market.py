@@ -1,110 +1,93 @@
-#import libraries
+# Import libraries
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 import numpy as np
-import geocoder
+import logging
 
 st.set_page_config(layout="wide")
 
-# -- Read in the data
-url = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Core/RDC_Inventory_Core_Metrics_Zip_History.csv"
-url_hot = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Hotness/RDC_Inventory_Hotness_Metrics_Zip_History.csv"
-cols = ['month_date_yyyymm', 'postal_code', 'median_listing_price',  'active_listing_count', 'median_days_on_market', 'new_listing_count', 'price_increased_count', 'price_reduced_count']
-cols_hot = ['month_date_yyyymm', 'postal_code', 'hotness_rank', 'hotness_rank_mm', 'hotness_rank_yy', 'hotness_score', 'supply_score', 'demand_score']
+# -- URLs for datasets
+URL_INV = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Core/RDC_Inventory_Core_Metrics_Zip_History.csv"
+URL_HOT = "https://econdata.s3-us-west-2.amazonaws.com/Reports/Hotness/RDC_Inventory_Hotness_Metrics_Zip_History.csv"
+
+COLUMNS_INV = [
+    'month_date_yyyymm', 'postal_code', 'median_listing_price',
+    'active_listing_count', 'median_days_on_market', 'new_listing_count',
+    'price_increased_count', 'price_reduced_count'
+]
+
+COLUMNS_HOT = [
+    'month_date_yyyymm', 'postal_code', 'hotness_rank', 'hotness_rank_mm',
+    'hotness_rank_yy', 'hotness_score', 'supply_score', 'demand_score'
+]
 
 @st.cache_data
 def load_data():
-    # Added logging for debugging purposes
-    st.write("Loading data from URLs...")
-    
-    # Read in the datasets
-    inv = pd.read_csv(url, low_memory=False, usecols=cols, sep=',')[:-1] # Drop contact info row
+    inv = pd.read_csv(URL_INV, usecols=COLUMNS_INV, dtype_backend="pyarrow")
+    inv = inv[inv['postal_code'].notna()]
     inv['month_date_yyyymm'] = pd.to_datetime(inv['month_date_yyyymm'], format='%Y%m')
-    
-    h = pd.read_csv(url_hot, low_memory=False, usecols=cols_hot, sep=',')[:-1] # Drop contact info row
-    h['month_date_yyyymm'] = pd.to_datetime(h['month_date_yyyymm'], format='%Y%m')
-    
-    # Merge datasets
-    d = pd.merge(inv, h, how="inner", on=['month_date_yyyymm', 'postal_code'])
-    
-    # Memory optimization
-    def reduce_mem_usage(df):
-        for col in df.columns:
-            col_type = df[col].dtype
-            if col_type != object:
-                c_min = df[col].min()
-                c_max = df[col].max()
-                if str(col_type)[:3] == 'int':
-                    if c_min > np.iinfo(np.int8).min and c_max < np.iinfo(np.int8).max:
-                        df[col] = df[col].astype(np.int8)
-                    elif c_min > np.iinfo(np.uint8).min and c_max < np.iinfo(np.uint8).max:
-                        df[col] = df[col].astype(np.uint8)
-                    elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
-                        df[col] = df[col].astype(np.int16)
-                    elif c_min > np.iinfo(np.uint16).min and c_max < np.iinfo(np.uint16).max:
-                        df[col] = df[col].astype(np.uint16)
-                    elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
-                        df[col] = df[col].astype(np.int32)
-                    elif c_min > np.iinfo(np.uint32).min and c_max < np.iinfo(np.uint32).max:
-                        df[col] = df[col].astype(np.uint32)                    
-                    elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
-                        df[col] = df[col].astype(np.int64)
-                    elif c_min > np.iinfo(np.uint64).min and c_max < np.iinfo(np.uint64).max:
-                        df[col] = df[col].astype(np.uint64)
-                elif str(col_type)[:5] == 'float':
-                    if c_min > np.finfo(np.float16).min and c_max < np.finfo(np.float16).max:
-                        df[col] = df[col].astype(np.float16)
-                    elif c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
-                        df[col] = df[col].astype(np.float32)
-                    else:
-                        df[col] = df[col].astype(np.float64)
-    reduce_mem_usage(d)
-    
-    # Added logging for confirmation of data loading
-    st.write("Data successfully loaded and memory optimized.")
-    
-    return d
 
-# Load data into a dataframe
-df = load_data()
+    hot = pd.read_csv(URL_HOT, usecols=COLUMNS_HOT, dtype_backend="pyarrow")
+    hot = hot[hot['postal_code'].notna()]
+    hot['month_date_yyyymm'] = pd.to_datetime(hot['month_date_yyyymm'], format='%Y%m')
 
-# Create 2 columns layout
+    df = pd.merge(inv, hot, how="inner", on=['month_date_yyyymm', 'postal_code'])
+    return df
+
+with st.spinner("Loading data..."):
+    df = load_data()
+
+zip_list = sorted(df['postal_code'].dropna().astype(str).unique())
+
+# Create layout columns
 col1, col2 = st.columns([20, 5])
 
-# Title column
+# Title
 with col1:
     st.title("Housing Market Trends by Zip Code")
 
-# Zip selector column
+# Zip selector
 with col2:
-    zip_input = st.selectbox("What zip code?", sorted(list(df.postal_code.unique())))
+    zip_input = st.selectbox("What zip code?", zip_list)
 
-# Display description
-st.markdown("This dashboard pulls in summary market metrics for all zip codes in the US and shows their trends over time. Use it to track median prices, price changes, new listings, and active inventory in your zip code of interest.")
+st.markdown("""
+This dashboard pulls in summary market metrics for all zip codes in the US and shows their trends over time. 
+Use it to track median prices, price changes, new listings, and active inventory in your zip code of interest.
+""")
 st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/data/)")
 
-# Static table of sample locations
+# Sample ZIP table
 data = {
-    'Location': ['Broken Bow, OK', 'Blue Ridge, GA', 'Sevierville, TN', 'Gatlinburg, TN', 'Pigeon Forge, TN', 'Madison, MS', 'Canton, MS', 'North Myrtle', 'Surfside Beach' ],
-    'Zip Code(s)': ['74728', '30513, 30522, 30560', '37862, 37876, 37864', '37738', '37863, 37868', '39110', '39046', '29582', '29575']
+    'Location': ['Broken Bow, OK', 'Blue Ridge, GA', 'Sevierville, TN', 'Gatlinburg, TN',
+                 'Pigeon Forge, TN', 'Madison, MS', 'Canton, MS', 'North Myrtle', 'Surfside Beach'],
+    'Zip Code(s)': ['74728', '30513, 30522, 30560', '37862, 37876, 37864', '37738',
+                    '37863, 37868', '39110', '39046', '29582', '29575']
 }
-codes = pd.DataFrame(data)
-st.table(codes)
+st.table(pd.DataFrame(data))
 
-# Filter the dataframe by the selected zip code
-df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm', ascending=True)
+# Filter data for selected ZIP
+df_tgt = df[df['postal_code'].astype(str) == zip_input].sort_values('month_date_yyyymm')
 
-# Plot each chart
+# Plotting function
 def plot_chart(data, x, y, title):
-    fig = px.line(data, x=x, y=y, title=title, markers=True)
-    st.plotly_chart(fig, use_container_width=True)
+    if y in data.columns and not data.empty:
+        fig = px.line(data, x=x, y=y, title=title, markers=True)
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.warning(f"No data available for {title}")
 
-# Create charts
-plot_chart(df_tgt, 'month_date_yyyymm', 'median_listing_price', 'Median Listing Price in ' + zip_input)
-plot_chart(df_tgt, 'month_date_yyyymm', 'active_listing_count', 'Monthly Active Listing Count in ' + zip_input)
-plot_chart(df_tgt, 'month_date_yyyymm', 'median_days_on_market', 'Median Days On Market in ' + zip_input)
-plot_chart(df_tgt, 'month_date_yyyymm', 'new_listing_count', 'Monthly New Listing Count in ' + zip_input)
-plot_chart(df_tgt, 'month_date_yyyymm', 'price_increased_count', 'Monthly Price Increase Count in ' + zip_input)
-plot_chart(df_tgt, 'month_date_yyyymm', 'price_reduced_count', 'Monthly Price Reduced Count in ' + zip_input)
-plot_chart(df_tgt, 'month_date_yyyymm', 'hotness_rank', 'Hotness Rank in ' + zip_input)
+# Define charts to render
+charts = {
+    'median_listing_price': 'Median Listing Price',
+    'active_listing_count': 'Monthly Active Listing Count',
+    'median_days_on_market': 'Median Days On Market',
+    'new_listing_count': 'Monthly New Listing Count',
+    'price_increased_count': 'Monthly Price Increase Count',
+    'price_reduced_count': 'Monthly Price Reduced Count',
+    'hotness_rank': 'Hotness Rank'
+}
+
+# Plot all charts
+for col, title in charts.items():
+    plot_chart(df_tgt, 'month_date_yyyymm', col, f'{title} in {zip_input}')
