@@ -76,10 +76,12 @@ st.dataframe(df.head(25))
 # Filter data for selected ZIP
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm')
 
-# Plotting function
+#Plotting function
 def plot_chart(data, x, y, title):
     if y in data.columns and not data.empty:
-        fig = px.line(data, x=x, y=data[y].astype(float), title=title, markers=True)
+        df = data.copy()
+        df[y] = df[y].astype(float)
+        fig = px.line(df, x=x, y=y, title=title, markers=True)
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.warning(f"No data available for {title}")
