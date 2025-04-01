@@ -71,7 +71,7 @@ st.table(pd.DataFrame(data))
 
 # Preview of data
 st.subheader("Preview of Realtor.com Housing Data")
-st.dataframe(df.head(25))
+st.dataframe(df_tgt.head(25))
 
 # Filter data for selected ZIP
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm')
