@@ -79,18 +79,6 @@ st.dataframe(df_tgt)
 
 for col in ['median_listing_price',
     'active_listing_count', 'median_days_on_market', 'new_listing_count',
-    'price_increased_count', 'price_reduced_count']:
-        st.line_chart(df_tgt, x="month_date_yyyymm", y=col)
+    'price_increased_count', 'price_reduced_count', 'hotness_rank']:
+        st.line_chart(df_tgt, x="month_date_yyyymm", y=col, title=str(col))
                       
-
-st.line_chart(df_tgt, x="month_date_yyyymm", y=["median_listing_price","yoy_list_price"])
-st.line_chart(df_tgt, x="month_date_yyyymm", y="active_listing_count")
-st.line_chart(df_tgt, x="month_date_yyyymm", y="median_days_on_market")
-st.line_chart(df_tgt, x="month_date_yyyymm", y="new_listing_count")
-st.line_chart(df_tgt, x="month_date_yyyymm", y="price_increased_count")
-st.line_chart(df_tgt, x="month_date_yyyymm", y="price_reduced_count")
-st.line_chart(df_tgt, x="month_date_yyyymm", y="hotness_rank")
-
-fig = px.line(df_tgt[['month_date_yyyymm','median_listing_price']].reset_index(drop=True), x="month_date_yyyymm", y="median_listing_price", title="Median Listing Price")
-st.plotly_chart(fig)
-
