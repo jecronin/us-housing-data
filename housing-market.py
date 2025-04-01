@@ -69,12 +69,17 @@ data = {
 }
 st.table(pd.DataFrame(data))
 
-# Preview of data
-st.subheader("Preview of Realtor.com Housing Data")
-st.dataframe(df.head(25))
 
 # Filter data for selected ZIP
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm')
+
+# Preview of data
+st.subheader("Preview of Realtor.com Housing Data")
+st.dataframe(df_tgt.head(25))
+
+df_tgt['month_date_yyyymm'] = pd.to_datetime(df_tgt['month_date_yyyymm'], format='%Y%m')
+print(f"Plotting charts for ZIP: {zip_input} — {len(df_tgt)} rows")
+print("Columns available:", df_tgt.columns)
 
 # Plotting function
 def plot_chart(data, x, y, title):
