@@ -36,7 +36,6 @@ def load_data():
 
     df = pd.merge(inv, hot, how="inner", on=['month_date_yyyymm', 'postal_code'])
     df['postal_code'] = df['postal_code'].astype(str)
-    df['yoy_list_price'] = df['median_listing_price'].pct_change(periods=12) * 100 # Assuming monthly data
     return df
 
 with st.spinner("Loading data..."):
@@ -72,6 +71,7 @@ st.table(pd.DataFrame(data))
 
 # Filter data for selected ZIP
 df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm')
+df_tgt['yoy_list_price'] = df_tgt['median_listing_price'].pct_change(periods=12) * 100 # Assuming monthly data
 
 # Preview of data
 st.subheader("Preview of Realtor.com Housing Data")
