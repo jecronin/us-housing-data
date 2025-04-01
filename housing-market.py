@@ -77,17 +77,13 @@ df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm')
 st.subheader("Preview of Realtor.com Housing Data")
 st.dataframe(df_tgt.head(25))
 
-df_tgt['month_date_yyyymm'] = pd.to_datetime(df_tgt['month_date_yyyymm'], format='%Y%m')
-print(f"Plotting charts for ZIP: {zip_input} — {len(df_tgt)} rows")
-print("Columns available:", df_tgt.columns)
-
-# Plotting function
+# Plot each chart
 def plot_chart(data, x, y, title):
-    if y in data.columns and not data.empty:
-        fig = px.line(data.copy(), x=x, y=data[y].astype(float), title=title, markers=True)
-        st.plotly_chart(fig, use_container_width=True)
-    else:
-        st.warning(f"No data available for {title}")
+    fig = px.line(data, x=x, y=y, title=title, markers=True)
+    st.plotly_chart(fig, use_container_width=True)
+
+# Create charts
+plot_chart(df_tgt, 'month_date_yyyymm', 'median_listing_price', 'Median Listing Price in ' + zip_input)
 
 # Define charts to render
 charts = {
