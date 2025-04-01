@@ -85,6 +85,7 @@ st.line_chart(df_tgt, x="month_date_yyyymm", y="price_increased_count")
 st.line_chart(df_tgt, x="month_date_yyyymm", y="price_reduced_count")
 st.line_chart(df_tgt, x="month_date_yyyymm", y="hotness_rank")
 
-fig = px.line(df_tgt, x="month_date_yyyymm", y="median_listing_price")
+df_tgt['median_listing_price'] = pd.to_numeric(df_tgt['median_listing_price'], errors='coerce')
+fig = px.line(df_tgt, x="month_date_yyyymm", y="median_listing_price", title="Median Listing Price")
+st.plotly_chart(fig)
 
-st.plotly_chart(fig, on_select="rerun")
