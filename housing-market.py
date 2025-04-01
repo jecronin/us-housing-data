@@ -76,7 +76,7 @@ df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm')
 st.subheader("Preview of Realtor.com Housing Data")
 st.dataframe(df_tgt)
 
-st.line_chart(df_tgt, x="month_date_yyyymm", y="median_listing_price", marker='o')
+st.line_chart(df_tgt, x="month_date_yyyymm", y="median_listing_price")
 st.line_chart(df_tgt, x="month_date_yyyymm", y="active_listing_count")
 st.line_chart(df_tgt, x="month_date_yyyymm", y="median_days_on_market")
 st.line_chart(df_tgt, x="month_date_yyyymm", y="new_listing_count")
