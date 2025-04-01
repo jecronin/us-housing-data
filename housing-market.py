@@ -76,6 +76,9 @@ df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm')
 st.subheader("Preview of Realtor.com Housing Data")
 st.dataframe(df_tgt.head(25))
 
+fig=px.line(df_tgt, x='month_date_yyyymm',y='median_listing_price')
+st.plotly_chart(fig, use_container_width=True)
+
 #Plotting function
 def plot_chart(data, x, y, title):
     if y in data.columns and not data.empty:
