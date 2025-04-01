@@ -74,9 +74,9 @@ df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm')
 
 # Preview of data
 st.subheader("Preview of Realtor.com Housing Data")
-st.dataframe(df_tgt.head(25))
+st.dataframe(df_tgt)
 
-fig=px.line(df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm'), x='month_date_yyyymm',y='median_listing_price')
+fig=px.line(df_tgt, x='month_date_yyyymm',y='median_listing_price')
 st.plotly_chart(fig, use_container_width=True)
 
 #Plotting function
