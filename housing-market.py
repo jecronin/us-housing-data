@@ -85,7 +85,7 @@ st.line_chart(df_tgt, x="month_date_yyyymm", y="median_listing_price")
 def plot_chart(data, x, y, title):
     if y in data.columns and not data.empty:
         fig = px.line(data, x=x, y=y, title=title, markers=True)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, on_select='rerun')
     else:
         st.warning(f"No data available for {title}")
 
