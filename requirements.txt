@@ -3,3 +3,4 @@ streamlit==1.25.0  # Keep this version
 pandas>=2.2.3
 geocoder>=1.38.1
 numpy==1.23.5
+orjson>=3.10.16
