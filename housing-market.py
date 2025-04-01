@@ -76,29 +76,10 @@ df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm')
 st.subheader("Preview of Realtor.com Housing Data")
 st.dataframe(df_tgt)
 
-fig=px.line(df_tgt[['month_date_yyyymm','median_listing_price']], x='month_date_yyyymm',y='median_listing_price')
-st.plotly_chart(fig, use_container_width=True, on_select='rerun')
-
 st.line_chart(df_tgt, x="month_date_yyyymm", y="median_listing_price")
-
-#Plotting function
-def plot_chart(data, x, y, title):
-    if y in data.columns and not data.empty:
-        st.line_chart(data, x=x, y=y, title=title)
-    else:
-        st.warning(f"No data available for {title}")
-
-# Define charts to render
-charts = {
-    'median_listing_price': 'Median Listing Price',
-    'active_listing_count': 'Monthly Active Listing Count',
-    'median_days_on_market': 'Median Days On Market',
-    'new_listing_count': 'Monthly New Listing Count',
-    'price_increased_count': 'Monthly Price Increase Count',
-    'price_reduced_count': 'Monthly Price Reduced Count',
-    'hotness_rank': 'Hotness Rank'
-}
-
-# Plot all charts
-for col, title in charts.items():
-    plot_chart(df_tgt, 'month_date_yyyymm', col, f'{title} in {zip_input}')
+st.line_chart(df_tgt, x="month_date_yyyymm", y="active_listing_count")
+st.line_chart(df_tgt, x="month_date_yyyymm", y="median_days_on_market")
+st.line_chart(df_tgt, x="month_date_yyyymm", y="new_listing_count")
+st.line_chart(df_tgt, x="month_date_yyyymm", y="price_increased_count")
+st.line_chart(df_tgt, x="month_date_yyyymm", y="price_reduced_count")
+st.line_chart(df_tgt, x="month_date_yyyymm", y="hotness_rank")
