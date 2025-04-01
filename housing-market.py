@@ -27,12 +27,15 @@ def load_data():
     inv = pd.read_csv(URL_INV, usecols=COLUMNS_INV, dtype_backend="pyarrow")
     inv = inv[inv['postal_code'].notna()]
     inv['month_date_yyyymm'] = pd.to_datetime(inv['month_date_yyyymm'], format='%Y%m')
+    inv['postal_code'] = inv['postal_code'].astype(str)
 
     hot = pd.read_csv(URL_HOT, usecols=COLUMNS_HOT, dtype_backend="pyarrow")
     hot = hot[hot['postal_code'].notna()]
     hot['month_date_yyyymm'] = pd.to_datetime(hot['month_date_yyyymm'], format='%Y%m')
+    hot['postal_code'] = hot['postal_code'].astype(str)
 
     df = pd.merge(inv, hot, how="inner", on=['month_date_yyyymm', 'postal_code'])
+    df['postal_code'] = df['postal_code'].astype(str)
     return df
 
 with st.spinner("Loading data..."):
@@ -71,7 +74,7 @@ st.subheader("Preview of Realtor.com Housing Data")
 st.dataframe(df.head(25))
 
 # Filter data for selected ZIP
-df_tgt = df[df['postal_code'].astype(str) == zip_input].sort_values('month_date_yyyymm')
+df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm')
 
 # Plotting function
 def plot_chart(data, x, y, title):
