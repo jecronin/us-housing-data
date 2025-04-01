@@ -63,9 +63,9 @@ st.write("Source: Realtor.com [Research Data](https://www.realtor.com/research/d
 # Sample ZIP table
 data = {
     'Location': ['Broken Bow, OK', 'Blue Ridge, GA', 'Sevierville, TN', 'Gatlinburg, TN',
-                 'Pigeon Forge, TN', 'Madison, MS', 'Canton, MS', 'North Myrtle', 'Surfside Beach'],
+                 'Pigeon Forge, TN', 'Madison, MS', 'Canton, MS', 'North Myrtle', 'Surfside Beach', 'Columbus, OH'],
     'Zip Code(s)': ['74728', '30513, 30522, 30560', '37862, 37876, 37864', '37738',
-                    '37863, 37868', '39110', '39046', '29582', '29575']
+                    '37863, 37868', '39110', '39046', '29582', '29575', '43206']
 }
 st.table(pd.DataFrame(data))
 
