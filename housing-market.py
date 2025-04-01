@@ -77,6 +77,12 @@ df_tgt['yoy_list_price'] = df_tgt['median_listing_price'].pct_change(periods=12)
 st.subheader("Preview of Realtor.com Housing Data")
 st.dataframe(df_tgt)
 
+for col in ['median_listing_price',
+    'active_listing_count', 'median_days_on_market', 'new_listing_count',
+    'price_increased_count', 'price_reduced_count']:
+        st.line_chart(df_tgt, x="month_date_yyyymm", y=col)
+                      
+
 st.line_chart(df_tgt, x="month_date_yyyymm", y=["median_listing_price","yoy_list_price"])
 st.line_chart(df_tgt, x="month_date_yyyymm", y="active_listing_count")
 st.line_chart(df_tgt, x="month_date_yyyymm", y="median_days_on_market")
