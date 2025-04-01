@@ -70,7 +70,7 @@ data = {
 st.table(pd.DataFrame(data))
 
 # Filter data for selected ZIP
-df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm').reset_index(inplace=True)
+df_tgt = df[df['postal_code'] == zip_input].sort_values('month_date_yyyymm').reset_index()
 df_tgt['yoy_list_price'] = df_tgt['median_listing_price'].pct_change(periods=12) * 100 # Assuming monthly data
 
 # Preview of data
