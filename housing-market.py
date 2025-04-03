@@ -81,4 +81,8 @@ for col in ['median_listing_price',
     'active_listing_count', 'median_days_on_market', 'new_listing_count',
     'price_increased_count', 'price_reduced_count', 'hotness_rank']:
         st.line_chart(df_tgt, x="month_date_yyyymm", y=col)
+        df_tgt[f"{col}_rolling"] = df_tgt[col].rolling(window=6).mean()
+        st.line_chart(
+        df_tgt.set_index("month_date_yyyymm")[[col, f"{col}_rolling"]].rename(columns={col: col + " (Actual)", f"{col}_rolling": col + " (6-mo Avg)"})
+    )
                       
